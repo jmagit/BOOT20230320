@@ -13,7 +13,7 @@ public class DemoApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		System.out.println("Adios mundo");
+		System.out.println("Aplicación arrancada");
 	}
 
 }
