@@ -27,7 +27,7 @@ public class StringServiceImpl implements StringService {
 
 	@Override
 	public void remove(Integer id) {
-		dao.save(item);
+		dao.save(id.toString());
 	}
 
 }
