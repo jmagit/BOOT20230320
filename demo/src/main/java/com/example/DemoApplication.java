@@ -2,6 +2,7 @@ package com.example;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -29,6 +30,9 @@ public class DemoApplication implements CommandLineRunner {
 	@Lazy
 	private StringService srvLocal;
 	
+	@Value("mi.valor")
+	private String config;
+	
 	@Override
 	public void run(String... args) throws Exception {
 		System.out.println("Aplicación arrancada");
@@ -42,6 +46,7 @@ public class DemoApplication implements CommandLineRunner {
 		srvLocal.add("Este es el local");
 		srv.add("Este es el remoto");
 		srvLocal.add("Este es el local");
+		System.out.println(config);
 	}
 
 }
