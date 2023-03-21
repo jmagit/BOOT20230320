@@ -38,7 +38,7 @@ public class DemoApplication implements CommandLineRunner {
 	@Autowired
 	Rango rango;
 	
-	@Autowired
+	@Autowired(required = false)
 	UnaTonteria tonteria;
 	
 	@Override
