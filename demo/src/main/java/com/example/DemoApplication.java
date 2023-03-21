@@ -1,9 +1,11 @@
 package com.example;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Lazy;
 
 import com.example.ioc.StringRepository;
 import com.example.ioc.StringRepositoryImpl;
@@ -19,7 +21,13 @@ public class DemoApplication implements CommandLineRunner {
 	}
 
 	@Autowired
+	@Qualifier("Remoto")
 	private StringService srv;
+	
+	@Autowired
+	@Qualifier("Local")
+	@Lazy
+	private StringService srvLocal;
 	
 	@Override
 	public void run(String... args) throws Exception {
@@ -29,6 +37,11 @@ public class DemoApplication implements CommandLineRunner {
 //		dao = new StringRepositoryMockImpl();
 //		var srv = new StringServiceImpl(dao);
 		System.out.println(srv.get(1));
+		System.out.println(srvLocal.get(1));
+		srv.add("Este es el remoto");
+		srvLocal.add("Este es el local");
+		srv.add("Este es el remoto");
+		srvLocal.add("Este es el local");
 	}
 
 }
