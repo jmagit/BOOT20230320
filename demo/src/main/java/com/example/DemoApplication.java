@@ -8,6 +8,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Lazy;
 
+import com.example.ioc.Rango;
 import com.example.ioc.StringRepository;
 import com.example.ioc.StringRepositoryImpl;
 import com.example.ioc.StringRepositoryMockImpl;
@@ -30,8 +31,11 @@ public class DemoApplication implements CommandLineRunner {
 	@Lazy
 	private StringService srvLocal;
 	
-	@Value("mi.valor")
+	@Value("${mi.valor}")
 	private String config;
+	
+	@Autowired
+	Rango rango;
 	
 	@Override
 	public void run(String... args) throws Exception {
@@ -47,6 +51,8 @@ public class DemoApplication implements CommandLineRunner {
 		srv.add("Este es el remoto");
 		srvLocal.add("Este es el local");
 		System.out.println(config);
+		System.out.println(rango.toString());
+		System.out.println(rango.getMin() + rango.getMax());
 	}
 
 }
