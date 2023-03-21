@@ -3,6 +3,7 @@ package com.example.ioc;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
