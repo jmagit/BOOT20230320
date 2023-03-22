@@ -45,8 +45,20 @@ public class DemoApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		System.out.println("Aplicación arrancada");
 		
+		StringRepository dao = new StringRepositoryImpl();
+//		dao = new StringRepositoryMockImpl();
+//		var srv = new StringServiceImpl(dao);
+//		System.out.println(srv.get(1));
+//		System.out.println(srvLocal.get(1));
+//		srv.add("Este es el remoto");
+//		srvLocal.add("Este es el local");
+//		srv.add("Este es el remoto");
+//		srvLocal.add("Este es el local");
+//		System.out.println(rango.toString());
+//		System.out.println(rango.getMin() + rango.getMax());
 		System.out.println(tonteria != null ? tonteria.dimeAlgo() : "Tonteria nula");
 		System.out.println(config);
+		srv.add("algo");
 	}
 
 }
