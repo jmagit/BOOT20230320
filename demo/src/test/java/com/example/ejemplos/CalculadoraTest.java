@@ -3,12 +3,20 @@ package com.example.ejemplos;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
+import com.example.core.test.Smoke;
+
+@TestMethodOrder(MethodOrderer.DisplayName.class)
 class CalculadoraTest {
 	Calculadora calc;
 
@@ -27,6 +35,7 @@ class CalculadoraTest {
 		}
 		@Nested
 		class OK {
+			@Smoke
 			@Test
 			void test_Suma_Positivo_Positivo() {
 				var calc = new Calculadora();
@@ -72,12 +81,19 @@ class CalculadoraTest {
 				assertEquals(0.3, rslt);
 			}
 			@Test
+			@Disabled
 			void testSumaMultiple() {
-				assertEquals(2, calc.suma(1,1));
+				assertEquals(-2, calc.suma(1,1));
 				assertEquals(0, calc.suma(-1,1));
 				assertEquals(0, calc.suma(1,-1));
 				assertEquals(-2, calc.suma(-1,-1));
 				assertEquals(0, calc.suma(0,0));
+			}
+			
+			@ParameterizedTest(name = "{0} + {1} = {2}")
+			@CsvSource(value = {"1,1,2", "0.1,0.2,0.3", "0,0,0", "-1,1,0","1,-1,0", "-1,-1,-2"})
+			void testSumasOK(double op1, double op2, double rslt) {
+				assertEquals(rslt, calc.suma(op1, op2));
 			}
 
 		}

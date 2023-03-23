@@ -5,7 +5,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+
+import com.example.core.test.Smoke;
 
 class PersonaTest {
 
@@ -14,6 +17,7 @@ class PersonaTest {
 	}
 
 	@Test
+	@Smoke
 	void testCreate() {
 		var p = Persona.builder().id(1).nombre("Pepito").apellidos("Grillo").build();
 //		p = null;
@@ -29,7 +33,7 @@ class PersonaTest {
 	void repeatedTest(RepetitionInfo repetitionInfo) {
 		var p = Persona.builder()
 				.id(repetitionInfo.getCurrentRepetition())
-				.nombre("Pepito" + (repetitionInfo.getCurrentRepetition() % 3 == 0 ? "" : repetitionInfo.getCurrentRepetition()))
+				.nombre("Pepito" + repetitionInfo.getCurrentRepetition()) // (repetitionInfo.getCurrentRepetition() % 3 == 0 ? "" : repetitionInfo.getCurrentRepetition()))
 				.apellidos("Grillo").build();
 //		p = null;
 //		assertNotNull(p);
