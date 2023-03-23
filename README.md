@@ -29,7 +29,7 @@
 - https://docs.spring.io/spring-cloud-commons/docs/current/reference/html/#spring-cloud-loadbalancer
 - https://docs.spring.io/spring-cloud-config/docs/current/reference/html/
 - https://docs.spring.io/spring-security/reference/index.html
-- [PATRONES de DISEÑO](refactoring.guru/es/design-patterns)
+- [PATRONES de DISEÑO](https://refactoring.guru/es/design-patterns)
 - [Markdown](https://markdown.es/sintaxis-markdown/)
 
 ## Ejemplos
