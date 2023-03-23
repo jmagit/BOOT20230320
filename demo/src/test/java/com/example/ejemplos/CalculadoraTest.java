@@ -21,6 +21,10 @@ class CalculadoraTest {
 	@DisplayName("Pruebas del método Suma")
 	@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 	class Suma {
+		@BeforeEach
+		void setUp() throws Exception {
+			calc = new Calculadora();
+		}
 		@Nested
 		class OK {
 			@Test
@@ -66,6 +70,14 @@ class CalculadoraTest {
 				var rslt = calc.suma(0.1, 0.2);
 
 				assertEquals(0.3, rslt);
+			}
+			@Test
+			void testSumaMultiple() {
+				assertEquals(2, calc.suma(1,1));
+				assertEquals(0, calc.suma(-1,1));
+				assertEquals(0, calc.suma(1,-1));
+				assertEquals(-2, calc.suma(-1,-1));
+				assertEquals(0, calc.suma(0,0));
 			}
 
 		}

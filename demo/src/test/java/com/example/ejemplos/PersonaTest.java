@@ -13,7 +13,15 @@ class PersonaTest {
 
 	@Test
 	void testCreate() {
-		fail("Not yet implemented");
+		var p = Persona.builder().id(1).nombre("Pepito").apellidos("Grillo").build();
+//		p = null;
+//		assertNotNull(p);
+		assertTrue(p instanceof Persona, "No es instancia de persona");
+		assertAll("Validar propiedades",
+			() -> assertEquals(1, p.getId(), "id"),
+			() -> assertEquals("Pepito", p.getNombre(), "getNombre"),
+			() -> assertEquals("Grillo", p.getApellidos(), "getApellidos")
+		);
 	}
 
 }
