@@ -15,6 +15,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import com.example.core.test.Smoke;
+import com.example.core.test.SpaceCamelCase;
 
 @TestMethodOrder(MethodOrderer.DisplayName.class)
 class CalculadoraTest {
@@ -27,7 +28,7 @@ class CalculadoraTest {
 
 	@Nested
 	@DisplayName("Pruebas del método Suma")
-	@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+	@DisplayNameGeneration(SpaceCamelCase.class)
 	class Suma {
 		@BeforeEach
 		void setUp() throws Exception {
