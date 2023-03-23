@@ -9,6 +9,7 @@ public class Calculadora {
 		return rslt.setScale(15, RoundingMode.HALF_DOWN).doubleValue();	}
 
 	public double divide(double a, double b) {
+		if(b == 0) throw new ArithmeticException("Divide by 0");
 		return a / b;
 	}
 
