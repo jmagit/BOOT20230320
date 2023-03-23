@@ -57,12 +57,12 @@ class CalculadoraTest {
 	}
 
 	@Test
-	void testDividir() {
+	void testDividirPorCero() {
 		var calc = new Calculadora();
 		
 		var rslt = calc.divide(1, 0.0);
 		
-		assertEquals(0.5, rslt);
+		assertEquals(Double.POSITIVE_INFINITY, rslt);
 	}
 
 }
