@@ -1,4 +1,4 @@
-# Curso de Java (Spring, Maven, JavaScript, NodeJS, ReactJS) - Rama
+# Curso de Java (Spring, Maven, JavaScript, NodeJS, ReactJS)
 
 ## Instalaciones
 
@@ -37,6 +37,9 @@
 - https://github.com/spring-projects/spring-data-examples
 - https://github.com/spring-projects/spring-data-rest-webmvc
 - https://github.com/spring-projects/spring-hateoas-examples
+
+## Ejercicios
+
 - https://github.com/emilybache/GildedRose-Refactoring-Kata
 
 ## Base de datos de ejemplos
