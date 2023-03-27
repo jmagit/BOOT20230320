@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -15,6 +16,8 @@ import org.springframework.test.context.ContextConfiguration;
 
 import com.example.ioc.StringRepository;
 import com.example.ioc.StringRepositoryMockImpl;
+import com.example.ioc.StringService;
+import com.example.ioc.StringServiceImpl;
 
 @SpringBootTest(properties = {"mi.valor=Falso"})
 //@Disabled
@@ -23,23 +26,33 @@ class DemoApplicationTests {
 	@Autowired
 	StringRepository dao;
 	
+	@Autowired
+	@Qualifier("Local")
+	StringService srv;
+	
 	@Test
 	void contextLoads() {
 		assertEquals("Soy el StringRepositoryImpl", dao.load());
+		assertEquals("Soy el StringRepositoryImpl en local", srv.get(1));
 	}
 	
 	@Value("${mi.valor:(Sin valor)}")
 	private String config;
 	@Test
 	void valueLoads() {
-		assertEquals("Valor por defecto", config);
+		assertEquals("Falso", config);
+//		assertEquals("Valor por defecto", config);
 	}
 
 	public static class IoCTestConfig {
 		@Bean
-		StringRepository getServicio() {
+		StringRepository getRepository() {
 			// return new ServicioImpl();
 			return new StringRepositoryMockImpl();
+		}
+		@Bean
+		StringService getServicio(StringRepository dao) {
+			return new StringServiceImpl(dao);
 		}
 	}
 	
@@ -49,17 +62,22 @@ class DemoApplicationTests {
 	class IoCTest {
 		@Autowired
 		StringRepository dao;
+		@Autowired
+		@Qualifier("Local")
+		StringService srv;
 		
 		@Test
 		void contextLoads() {
-			assertEquals("Soy el doble de pruebas de StringRepository", dao.load());
+//			assertEquals("Soy el doble de pruebas de StringRepository", dao.load());
+			assertEquals("Soy el doble de pruebas de StringRepository en local", srv.get(1));
 		}
 		
 		@Value("${mi.valor:(Sin valor)}")
 		private String config;
 		@Test
 		void valueLoads() {
-			assertEquals("Valor para las pruebas", config);
+			assertEquals("Falso", config);
+			//assertEquals("Valor para las pruebas", config);
 		}
 	}
 	
@@ -79,7 +97,7 @@ class DemoApplicationTests {
 		
 		@Test
 		void contextLoads() {
-			assertEquals("Soy el doble de pruebas de StringRepository", dao.load());
+			assertEquals("Soy el StringRepositoryImpl", dao.load());
 		}
 	}
 	
