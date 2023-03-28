@@ -10,6 +10,8 @@ import com.example.domains.contracts.repositories.ActorRepository;
 import com.example.domains.entities.Actor;
 import com.example.ioc.EjemplosIoC;
 
+import jakarta.transaction.Transactional;
+
 @SpringBootApplication
 public class DemoApplication implements CommandLineRunner {
 
@@ -21,6 +23,7 @@ public class DemoApplication implements CommandLineRunner {
 	ActorRepository dao;
 	
 	@Override
+	@Transactional
 	public void run(String... args) throws Exception {
 		System.out.println("Aplicación arrancada");
 //		(new EjemplosIoC()).run();
@@ -38,9 +41,25 @@ public class DemoApplication implements CommandLineRunner {
 //		}
 //		dao.findTop5ByFirstNameStartingWithOrderByLastNameDesc("P")
 //			.forEach(System.out::println);
-		dao.findTop5ByFirstNameStartingWith("P", Sort.by("LastName").descending())
-			.forEach(System.out::println);
-		dao.findTop5ByFirstNameStartingWith("P", Sort.by("FirstName"))
-		.forEach(System.out::println);
+//		dao.findTop5ByFirstNameStartingWith("P", Sort.by("LastName").descending())
+//			.forEach(System.out::println);
+//		dao.findTop5ByFirstNameStartingWith("P", Sort.by("FirstName"))
+//		.forEach(System.out::println);
+//		dao.findConJPQL().forEach(System.out::println);
+//		dao.findConJPQL(5).forEach(System.out::println);
+//		dao.findConSQL(5).forEach(System.out::println);
+//		dao.findAll((root, query, builder) -> builder.lessThan(root.get("actorId"), 5))
+//			.forEach(System.out::println);
+//		dao.findAll((root, query, builder) -> builder.greaterThan(root.get("actorId"), 200))
+//			.forEach(System.out::println);
+		var item = dao.findById(1);
+		if(item.isPresent()) {
+			var actor = item.get();
+			System.out.println(actor);
+			actor.getFilmActors()
+			.forEach(o -> System.out.println(o.getFilm().getTitle()));
+		} else {
+			System.out.println("Actor no encontrado");
+		}
 	}
 }
