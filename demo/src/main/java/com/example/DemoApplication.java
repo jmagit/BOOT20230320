@@ -85,14 +85,14 @@ public class DemoApplication implements CommandLineRunner {
 //			System.out.println(actor.getErrorsMessage());
 //		} else 
 //			dao.save(actor);
-		ObjectMapper objectMapper = new ObjectMapper();
-		dao.findAllBy(ActorDTO.class).stream().map(
-				item -> {
-					try {
-						return objectMapper.writeValueAsString(item);
-					} catch (JsonProcessingException e) {
-						return "";
-					}
-				}).forEach(System.out::println);
+//		ObjectMapper objectMapper = new ObjectMapper();
+//		dao.findAllBy(ActorDTO.class).stream().map(
+//				item -> {
+//					try {
+//						return objectMapper.writeValueAsString(item);
+//					} catch (JsonProcessingException e) {
+//						return "";
+//					}
+//				}).forEach(System.out::println);
 	}
 }
