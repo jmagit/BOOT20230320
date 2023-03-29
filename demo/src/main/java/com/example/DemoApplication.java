@@ -11,6 +11,8 @@ import com.example.domains.entities.Actor;
 import com.example.ioc.EjemplosIoC;
 
 import jakarta.transaction.Transactional;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
 
 @SpringBootApplication
 public class DemoApplication implements CommandLineRunner {
@@ -52,14 +54,25 @@ public class DemoApplication implements CommandLineRunner {
 //			.forEach(System.out::println);
 //		dao.findAll((root, query, builder) -> builder.greaterThan(root.get("actorId"), 200))
 //			.forEach(System.out::println);
-		var item = dao.findById(1);
-		if(item.isPresent()) {
-			var actor = item.get();
-			System.out.println(actor);
-			actor.getFilmActors()
-			.forEach(o -> System.out.println(o.getFilm().getTitle()));
-		} else {
-			System.out.println("Actor no encontrado");
-		}
+//		var item = dao.findById(1);
+//		if(item.isPresent()) {
+//			var actor = item.get();
+//			System.out.println(actor);
+//			actor.getFilmActors()
+//			.forEach(o -> System.out.println(o.getFilm().getTitle()));
+//		} else {
+//			System.out.println("Actor no encontrado");
+//		}
+		var actor = new Actor(0, "4", "d");
+//		Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+//		var err = validator.validate(actor);
+//		if(err.size() > 0) {
+//			err.forEach(e -> System.out.println(e.getPropertyPath() + ": " + e.getMessage()));
+//		} else 
+//			dao.save(actor);
+		if(actor.isInvalid()) {
+			System.out.println(actor.getErrorsMessage());
+		} else 
+			dao.save(actor);
 	}
 }

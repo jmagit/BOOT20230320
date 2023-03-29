@@ -24,7 +24,9 @@ public abstract class EntityBase<E> {
 	public String getErrorsMessage() {
 		if(isValid()) return "";
 		StringBuilder sb = new StringBuilder("ERRORES: ");
-		getErrors().forEach(item -> sb.append(item.getPropertyPath() + ": " + item.getMessage() + ". "));
+//		getErrors().forEach(item -> sb.append(item.getPropertyPath() + ": " + item.getMessage() + ". "));
+		getErrors().stream().map(item -> item.getPropertyPath() + ": " + item.getMessage() + ". ")
+			.sorted().forEach(sb::append);;
 		return sb.toString().trim();
 	}
 	
