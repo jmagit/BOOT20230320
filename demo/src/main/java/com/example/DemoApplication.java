@@ -12,6 +12,8 @@ import com.example.domains.entities.Actor;
 import com.example.domains.entities.dtos.ActorDTO;
 import com.example.domains.entities.dtos.ActorShort;
 import com.example.ioc.EjemplosIoC;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Validation;
@@ -71,7 +73,7 @@ public class DemoApplication implements CommandLineRunner {
 //		dao.findByActorIdNotNull().forEach(System.out::println);
 //		dao.findByActorIdNotNull().forEach(item->System.out.println(item.getActorId() + " " + item.getNombre()));
 //		dao.findAllBy(ActorShort.class).forEach(item->System.out.println(item.getActorId() + " " + item.getNombre()));
-		dao.findAllBy(ActorDTO.class).forEach(System.out::println);
+//		dao.findAllBy(ActorDTO.class).forEach(System.out::println);
 //		var actor = new Actor(0, "4", "d");
 ////		Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 ////		var err = validator.validate(actor);
@@ -83,5 +85,14 @@ public class DemoApplication implements CommandLineRunner {
 //			System.out.println(actor.getErrorsMessage());
 //		} else 
 //			dao.save(actor);
+		ObjectMapper objectMapper = new ObjectMapper();
+		dao.findAllBy(ActorDTO.class).stream().map(
+				item -> {
+					try {
+						return objectMapper.writeValueAsString(item);
+					} catch (JsonProcessingException e) {
+						return "";
+					}
+				}).forEach(System.out::println);
 	}
 }
