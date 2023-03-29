@@ -4,10 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 import com.example.domains.contracts.repositories.ActorRepository;
 import com.example.domains.entities.Actor;
+import com.example.domains.entities.dtos.ActorDTO;
+import com.example.domains.entities.dtos.ActorShort;
 import com.example.ioc.EjemplosIoC;
 
 import jakarta.transaction.Transactional;
@@ -63,16 +66,22 @@ public class DemoApplication implements CommandLineRunner {
 //		} else {
 //			System.out.println("Actor no encontrado");
 //		}
-		var actor = new Actor(0, "4", "d");
-//		Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-//		var err = validator.validate(actor);
-//		if(err.size() > 0) {
-//			err.forEach(e -> System.out.println(e.getPropertyPath() + ": " + e.getMessage()));
+//		var rslt = dao.findAll(PageRequest.of(1, 20, Sort.by("actorId")));
+//		rslt.getContent().stream().map(item -> ActorDTO.from(item)).forEach(System.out::println);
+//		dao.findByActorIdNotNull().forEach(System.out::println);
+//		dao.findByActorIdNotNull().forEach(item->System.out.println(item.getActorId() + " " + item.getNombre()));
+//		dao.findAllBy(ActorShort.class).forEach(item->System.out.println(item.getActorId() + " " + item.getNombre()));
+		dao.findAllBy(ActorDTO.class).forEach(System.out::println);
+//		var actor = new Actor(0, "4", "d");
+////		Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+////		var err = validator.validate(actor);
+////		if(err.size() > 0) {
+////			err.forEach(e -> System.out.println(e.getPropertyPath() + ": " + e.getMessage()));
+////		} else 
+////			dao.save(actor);
+//		if(actor.isInvalid()) {
+//			System.out.println(actor.getErrorsMessage());
 //		} else 
 //			dao.save(actor);
-		if(actor.isInvalid()) {
-			System.out.println(actor.getErrorsMessage());
-		} else 
-			dao.save(actor);
 	}
 }
