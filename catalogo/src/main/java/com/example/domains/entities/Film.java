@@ -81,13 +81,13 @@ public class Film extends EntityBase<Film> implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="film_id")
+	@Column(name="film_id", unique=true, nullable=false)
 	private int filmId;
 
 	@Lob
 	private String description;
 
-	@Column(name="last_update", insertable = false, updatable = false)
+	@Column(name="last_update", insertable = false, updatable = false, nullable=false)
 	private Timestamp lastUpdate;
 
 	@Positive
@@ -97,28 +97,29 @@ public class Film extends EntityBase<Film> implements Serializable {
 	private Rating rating;
 
 	//@Temporal(TemporalType.DATE)
-	@Column(name="release_year")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy")
 	@Min(1895)
+	@Column(name="release_year")
 	private Short releaseYear;
 
-	@Column(name="rental_duration")
 	@Positive
+	@Column(name="rental_duration", nullable=false)
 	private Byte rentalDuration;
 
-	@Column(name="rental_rate")
 	@Positive
 	@DecimalMin(value = "0.0", inclusive = false)
     @Digits(integer=2, fraction=2)
+	@Column(name="rental_rate", nullable=false, precision=10, scale=2)
 	private BigDecimal rentalRate;
 
-	@Column(name="replacement_cost")
 	@DecimalMin(value = "0.0", inclusive = false)
     @Digits(integer=3, fraction=2)
+	@Column(name="replacement_cost", nullable=false, precision=10, scale=2)
 	private BigDecimal replacementCost;
 
 	@NotBlank
 	@Size(max = 128)
+	@Column(nullable=false, length=128)
 	private String title;
 
 	//bi-directional many-to-one association to Language
@@ -150,9 +151,9 @@ public class Film extends EntityBase<Film> implements Serializable {
 	}
 
 	public Film(int filmId, @NotBlank @Size(max = 128) String title, String description, @Min(1895) Short releaseYear,
-			@NotNull Language language, Language languageVO, @Positive byte rentalDuration,
+			@NotNull Language language, Language languageVO, @Positive Byte rentalDuration,
 			@Positive @DecimalMin(value = "0.0", inclusive = false) @Digits(integer = 2, fraction = 2) BigDecimal rentalRate,
-			@Positive int length,
+			@Positive Integer length,
 			@DecimalMin(value = "0.0", inclusive = false) @Digits(integer = 3, fraction = 2) BigDecimal replacementCost,
 			Rating rating) {
 		super();
@@ -171,7 +172,7 @@ public class Film extends EntityBase<Film> implements Serializable {
 
 	public Film(@NotBlank @Size(max = 128) String title,
 			@NotNull Language language, 
-			@Positive byte rentalDuration,
+			@Positive Byte rentalDuration,
 			@Positive @DecimalMin(value = "0.0", inclusive = false) @Digits(integer = 2, fraction = 2) BigDecimal rentalRate,
 			@Positive int length,
 			@DecimalMin(value = "0.0", inclusive = false) @Digits(integer = 3, fraction = 2) BigDecimal replacementCost) {
@@ -212,11 +213,11 @@ public class Film extends EntityBase<Film> implements Serializable {
 		this.lastUpdate = lastUpdate;
 	}
 
-	public int getLength() {
+	public Integer getLength() {
 		return this.length;
 	}
 
-	public void setLength(int length) {
+	public void setLength(Integer length) {
 		this.length = length;
 	}
 
@@ -236,11 +237,11 @@ public class Film extends EntityBase<Film> implements Serializable {
 		this.releaseYear = releaseYear;
 	}
 
-	public byte getRentalDuration() {
+	public Byte getRentalDuration() {
 		return this.rentalDuration;
 	}
 
-	public void setRentalDuration(byte rentalDuration) {
+	public void setRentalDuration(Byte rentalDuration) {
 		this.rentalDuration = rentalDuration;
 	}
 
