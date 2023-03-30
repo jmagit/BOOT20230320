@@ -163,6 +163,12 @@ public class Film extends EntityBase<Film> implements Serializable {
 		this.languageVO = languageVO;
 	}
 
+	public Film(@NotBlank @Size(max = 128) String title, @NotNull Language language) {
+		super();
+		this.title = title;
+		this.language = language;
+	}
+
 	public int getFilmId() {
 		return this.filmId;
 	}
