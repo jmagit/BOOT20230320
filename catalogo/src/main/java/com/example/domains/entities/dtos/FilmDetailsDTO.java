@@ -39,11 +39,9 @@ public class FilmDetailsDTO {
 				source.getTitle(),
 				source.getLanguage() == null ? null : source.getLanguage().getName(),
 				source.getLanguageVO() == null ? null : source.getLanguageVO().getName(),
-				source.getFilmActors().stream().map(item -> item.getActor().getFirstName() + " " + item.getActor().getLastName())
-					.sorted()
-					.collect(Collectors.toList()),
-				source.getFilmCategories().stream().map(item -> item.getCategory().getName())
-					.collect(Collectors.toList())
+				source.getActors().stream().map(item -> item.getFirstName() + " " + item.getLastName())
+					.sorted().toList(),
+				source.getCategories().stream().map(item -> item.getName()).sorted().toList()
 				);
 	}
 }

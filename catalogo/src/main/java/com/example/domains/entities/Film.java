@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 
 import com.example.domains.core.entities.EntityBase;
@@ -90,7 +91,7 @@ public class Film extends EntityBase<Film> implements Serializable {
 	private Timestamp lastUpdate;
 
 	@Positive
-	private int length;
+	private Integer length;
 
 	@Convert(converter = RatingConverter.class)
 	private Rating rating;
@@ -103,7 +104,7 @@ public class Film extends EntityBase<Film> implements Serializable {
 
 	@Column(name="rental_duration")
 	@Positive
-	private byte rentalDuration;
+	private Byte rentalDuration;
 
 	@Column(name="rental_rate")
 	@Positive
@@ -148,25 +149,39 @@ public class Film extends EntityBase<Film> implements Serializable {
 		this.filmId = filmId;
 	}
 
-	public Film(int filmId, String description, int length, Rating rating, Short releaseYear, byte rentalDuration,
-			BigDecimal rentalRate, BigDecimal replacementCost, String title, Language language, Language languageVO) {
+	public Film(int filmId, @NotBlank @Size(max = 128) String title, String description, @Min(1895) Short releaseYear,
+			@NotNull Language language, Language languageVO, @Positive byte rentalDuration,
+			@Positive @DecimalMin(value = "0.0", inclusive = false) @Digits(integer = 2, fraction = 2) BigDecimal rentalRate,
+			@Positive int length,
+			@DecimalMin(value = "0.0", inclusive = false) @Digits(integer = 3, fraction = 2) BigDecimal replacementCost,
+			Rating rating) {
+		super();
 		this.filmId = filmId;
-		this.description = description;
-		this.length = length;
-		this.rating = rating;
-		this.releaseYear = releaseYear;
-		this.rentalDuration = rentalDuration;
-		this.rentalRate = rentalRate;
-		this.replacementCost = replacementCost;
 		this.title = title;
+		this.description = description;
+		this.releaseYear = releaseYear;
 		this.language = language;
 		this.languageVO = languageVO;
+		this.rentalDuration = rentalDuration;
+		this.rentalRate = rentalRate;
+		this.length = length;
+		this.replacementCost = replacementCost;
+		this.rating = rating;
 	}
 
-	public Film(@NotBlank @Size(max = 128) String title, @NotNull Language language) {
+	public Film(@NotBlank @Size(max = 128) String title,
+			@NotNull Language language, 
+			@Positive byte rentalDuration,
+			@Positive @DecimalMin(value = "0.0", inclusive = false) @Digits(integer = 2, fraction = 2) BigDecimal rentalRate,
+			@Positive int length,
+			@DecimalMin(value = "0.0", inclusive = false) @Digits(integer = 3, fraction = 2) BigDecimal replacementCost) {
 		super();
 		this.title = title;
 		this.language = language;
+		this.rentalDuration = rentalDuration;
+		this.rentalRate = rentalRate;
+		this.length = length;
+		this.replacementCost = replacementCost;
 	}
 
 	public int getFilmId() {
@@ -269,16 +284,21 @@ public class Film extends EntityBase<Film> implements Serializable {
 		this.languageVO = languageVO;
 	}
 
+	// Gestión de actores
 
 	public List<Actor> getActors() {
 		return this.filmActors.stream().map(item -> item.getActor()).toList();
+	}
+	public void setActors(List<Actor> source) {
+		if(filmActors == null || !filmActors.isEmpty()) clearActors();
+		source.forEach(item -> addActor(item));
 	}
 	public void clearActors() {
 		filmActors = new ArrayList<FilmActor>() ;
 	}
 	public void addActor(Actor actor) {
 		FilmActor filmActor = new FilmActor(this, actor);
-		getFilmActors().add(filmActor);
+		filmActors.add(filmActor);
 	}
 	public void addActor(int actorId) {
 		addActor(new Actor(actorId));
@@ -290,36 +310,14 @@ public class Film extends EntityBase<Film> implements Serializable {
 		filmActors.remove(filmActor.get());
 	}
 
-	
-	public List<FilmActor> getFilmActors() {
-		return this.filmActors;
-	}
-
-	public void setFilmActors(List<FilmActor> filmActors) {
-		this.filmActors = filmActors;
-	}
-
-	public FilmActor addFilmActor(FilmActor filmActor) {
-		getFilmActors().add(filmActor);
-		filmActor.setFilm(this);
-
-		return filmActor;
-	}
-	public FilmActor addFilmActor(Actor actor) {
-		FilmActor filmActor = new FilmActor(this, actor);
-		filmActors.add(filmActor);
-		return filmActor;
-	}
-
-	public FilmActor removeFilmActor(FilmActor filmActor) {
-		getFilmActors().remove(filmActor);
-		filmActor.setFilm(null);
-
-		return filmActor;
-	}
+	// Gestión de categorias
 
 	public List<Category> getCategories() {
 		return this.filmCategories.stream().map(item -> item.getCategory()).toList();
+	}
+	public void setCategories(List<Category> source) {
+		if(filmCategories == null || !filmCategories.isEmpty()) clearCategories();
+		source.forEach(item -> addCategory(item));
 	}
 	public void clearCategories() {
 		filmCategories = new ArrayList<FilmCategory>() ;
@@ -336,33 +334,6 @@ public class Film extends EntityBase<Film> implements Serializable {
 		if(filmCategory.isEmpty())
 			return;
 		filmCategories.remove(filmCategory.get());
-	}
-
-	public List<FilmCategory> getFilmCategories() {
-		return this.filmCategories;
-	}
-
-	public void setFilmCategories(List<FilmCategory> filmCategories) {
-		this.filmCategories = filmCategories;
-	}
-
-	public FilmCategory addFilmCategory(FilmCategory filmCategory) {
-		getFilmCategories().add(filmCategory);
-		filmCategory.setFilm(this);
-
-		return filmCategory;
-	}
-	public FilmCategory addFilmCategory(Category category) {
-		FilmCategory filmCategory = new FilmCategory(this, category);
-		getFilmCategories().add(filmCategory);
-		return filmCategory;
-	}
-
-	public FilmCategory removeFilmCategory(FilmCategory filmCategory) {
-		getFilmCategories().remove(filmCategory);
-		filmCategory.setFilm(null);
-
-		return filmCategory;
 	}
 
 	@Override
@@ -382,4 +353,33 @@ public class Film extends EntityBase<Film> implements Serializable {
 		return filmId == other.filmId;
 	}
 
+	public Film merge(Film target) {
+		target.title = title;
+		target.description = description;
+		target.releaseYear = releaseYear;
+		target.language = language;
+		target.languageVO = languageVO;
+		target.rentalDuration = rentalDuration;
+		target.rentalRate = rentalRate;
+		target.length = length;
+		target.replacementCost = replacementCost;
+		target.rating = rating;
+		// Borra los actores que sobran
+		target.getActors().stream()
+			.filter(item -> !getActors().contains(item))
+			.forEach(item -> target.removeActor(item));
+		// Añade los actores que faltan
+		getActors().stream()
+			.filter(item -> !target.getActors().contains(item))
+			.forEach(item -> target.addActor(item));
+		// Añade los categorias que faltan
+		target.getCategories().stream()
+			.filter(item -> !getCategories().contains(item))
+			.forEach(item -> target.removeCategory(item));
+		// Borra los categorias que sobran
+		getCategories().stream()
+			.filter(item -> !target.getCategories().contains(item))
+			.forEach(item -> target.addCategory(item));
+		return target;
+	}
 }
