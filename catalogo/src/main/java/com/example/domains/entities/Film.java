@@ -301,7 +301,7 @@ public class Film extends EntityBase<Film> implements Serializable {
 	}
 	public FilmActor addFilmActor(Actor actor) {
 		FilmActor filmActor = new FilmActor(this, actor);
-		getFilmActors().add(filmActor);
+		filmActors.add(filmActor);
 		return filmActor;
 	}
 
@@ -320,13 +320,13 @@ public class Film extends EntityBase<Film> implements Serializable {
 	}
 	public void addCategory(Category item) {
 		FilmCategory filmCategory = new FilmCategory(this, item);
-		getFilmCategories().add(filmCategory);
+		filmCategories.add(filmCategory);
 	}
 	public void addCategory(int id) {
 		addCategory(new Category(id));
 	}
-	public void removeCategory(Category actor) {
-		var filmCategory = filmCategories.stream().filter(item -> item.getCategory().equals(actor)).findFirst();
+	public void removeCategory(Category ele) {
+		var filmCategory = filmCategories.stream().filter(item -> item.getCategory().equals(ele)).findFirst();
 		if(filmCategory.isEmpty())
 			return;
 		filmCategories.remove(filmCategory.get());
