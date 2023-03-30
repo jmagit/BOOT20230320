@@ -1,4 +1,4 @@
-package com.example.domains.core.services.contracts;
+package com.example.domains.core.contracts.services;
 
 import java.util.List;
 import java.util.Optional;

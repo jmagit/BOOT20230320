@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.example.domains.core.repositories.contracts.RepositoryWithProjections;
+import com.example.domains.core.contracts.repositories.RepositoryWithProjections;
 import com.example.domains.entities.Actor;
 import com.example.domains.entities.dtos.ActorDTO;
 import com.example.domains.entities.dtos.ActorShort;

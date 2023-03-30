@@ -1,4 +1,4 @@
-package com.example.domains.core.services.contracts;
+package com.example.domains.core.contracts.services;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
