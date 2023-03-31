@@ -48,7 +48,7 @@ public class CatalogoApplication implements CommandLineRunner {
 //		peli.addCategory(1);
 //		peli.setTitle("Adios mundo");
 //		srv.modify(peli);
-//		srv.deleteById(1001);
+		srv.deleteById(1001);
 	}
 
 }
