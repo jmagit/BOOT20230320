@@ -1,5 +1,10 @@
 package com.example.batch;
 
+import java.io.IOException;
+import java.io.Writer;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.sql.DataSource;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -12,6 +17,7 @@ import org.springframework.batch.item.database.JdbcBatchItemWriter;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
 import org.springframework.batch.item.database.builder.JdbcBatchItemWriterBuilder;
 import org.springframework.batch.item.database.builder.JdbcCursorItemReaderBuilder;
+import org.springframework.batch.item.file.FlatFileHeaderCallback;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.FlatFileItemWriter;
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
@@ -19,6 +25,10 @@ import org.springframework.batch.item.file.builder.FlatFileItemWriterBuilder;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor;
 import org.springframework.batch.item.file.transform.DelimitedLineAggregator;
+import org.springframework.batch.item.xml.StaxEventItemReader;
+import org.springframework.batch.item.xml.StaxEventItemWriter;
+import org.springframework.batch.item.xml.builder.StaxEventItemReaderBuilder;
+import org.springframework.batch.item.xml.builder.StaxEventItemWriterBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -26,8 +36,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.oxm.xstream.XStreamMarshaller;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import com.example.model.PhotoDTO;
+import com.thoughtworks.xstream.security.AnyTypePermission;
 import com.example.model.Persona;
 import com.example.model.PersonaDTO;
 
@@ -122,17 +135,102 @@ public class PersonasBatchConfiguration {
 	}
 
 
+//	@Bean
+//	public Job personasJob(PersonasJobListener listener, Step importCSV2DBStep1, 
+//			Step exportDB2CSVStep, Step copyFilesInDir) {
+//		return new JobBuilder("personasJob", jobRepository)
+//				.incrementer(new RunIdIncrementer())
+//				.listener(listener)
+//				.start(copyFilesInDir)
+//				.next(importCSV2DBStep1)
+//				.next(exportDB2CSVStep)
+//				.build();
+//	}
+
+	@Autowired 
+	private PhotoRestItemReader photoRestItemReader;
+	@Autowired 
+	private ItemFailureLoggerListener erroresListener;
+	
+//	@Bean
+	public Job photoJob() {
+		String[] headers = new String[] { "id", "author", "width", "height", "url", "download_url" };
+		return new JobBuilder("photoJob", jobRepository)
+			.incrementer(new RunIdIncrementer())
+			.start(new StepBuilder("photoJobStep1", jobRepository)
+				.listener(erroresListener)
+				.<PhotoDTO, PhotoDTO>chunk(100, transactionManager)
+				.reader(photoRestItemReader)
+				.writer(new FlatFileItemWriterBuilder<PhotoDTO>().name("photoCSVItemWriter")
+					.resource(new FileSystemResource("output/photoData.csv"))
+					.headerCallback(new FlatFileHeaderCallback() {
+						public void writeHeader(Writer writer) throws IOException {
+						writer.write(String.join(",", headers));
+						}})
+					.lineAggregator(new DelimitedLineAggregator<PhotoDTO>() { {
+						setDelimiter(",");
+						setFieldExtractor(new BeanWrapperFieldExtractor<PhotoDTO>() { {
+							setNames(headers);
+						}});
+					}}).build())
+				.build())
+			.build();
+	}
+
+	public StaxEventItemReader<PersonaDTO> personaXMLItemReader() {
+		XStreamMarshaller marshaller = new XStreamMarshaller();
+		Map<String, Class> aliases = new HashMap<>();
+		aliases.put("Persona", PersonaDTO.class);
+		marshaller.setAliases(aliases);
+		marshaller.setTypePermissions(AnyTypePermission.ANY);
+		return new StaxEventItemReaderBuilder<PersonaDTO>()
+				.name("personaXMLItemReader")
+				.resource(new ClassPathResource("Personas.xml"))
+				.addFragmentRootElements("Persona")
+				.unmarshaller(marshaller).build();
+	}	
 	@Bean
-	public Job personasJob(PersonasJobListener listener, Step importCSV2DBStep1, 
-			Step exportDB2CSVStep, Step copyFilesInDir) {
+	public Step importXML2DBStep1(JdbcBatchItemWriter<Persona> personaDBItemWriter) {
+		return new StepBuilder("importXML2DBStep1", jobRepository)
+				.<PersonaDTO, Persona>chunk(10, transactionManager)
+				.reader(personaXMLItemReader())
+				.processor(personaItemProcessor)
+				.writer(personaDBItemWriter).build();
+	}
+	
+	public StaxEventItemWriter<Persona> personaXMLItemWriter() {
+		XStreamMarshaller marshaller = new XStreamMarshaller();
+		Map<String, Class> aliases = new HashMap<>();
+		aliases.put("Persona", Persona.class);
+		marshaller.setAliases(aliases);
+		return new StaxEventItemWriterBuilder<Persona>()
+				.name("personaXMLItemWriter")
+				.resource(new FileSystemResource("output/outputData.xml"))
+				.marshaller(marshaller)
+				.rootTagName("Personas")
+				.overwriteOutput(true)
+				.build();
+	}
+	
+	@Bean
+	public Step exportDB2XMLStep(JdbcCursorItemReader<Persona> personaDBItemReader) {
+		return new StepBuilder("exportDB2XMLStep", jobRepository)
+				.<Persona, Persona>chunk(100, transactionManager)
+				.reader(personaDBItemReader)
+				.writer(personaXMLItemWriter())
+				.build();
+	}
+	
+	@Bean
+	public Job personasJob(Step importXML2DBStep1, Step exportDB2XMLStep, Step exportDB2CSVStep) {
 		return new JobBuilder("personasJob", jobRepository)
 				.incrementer(new RunIdIncrementer())
-				.listener(listener)
-				.start(copyFilesInDir)
-				.next(importCSV2DBStep1)
+				.start(importXML2DBStep1)
+				.next(exportDB2XMLStep)
 				.next(exportDB2CSVStep)
 				.build();
 	}
+
 
 
 }
