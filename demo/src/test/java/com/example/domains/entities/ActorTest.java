@@ -18,7 +18,7 @@ class ActorTest {
 	@DisplayName("El nombre de tener entre 2 y 45 caracteres, y no puede estar en blanco")
 	@ParameterizedTest(name = "nombre: -{0}- -> {1}")
 	@CsvSource(value = {
-			"'','ERRORES: firstName: no debe estar vacío, el tamaño debe estar entre 2 y 45.'", 
+			"'','ERRORES: firstName: el tamaño debe estar entre 2 y 45, no debe estar vacío.'", 
 			"' ','ERRORES: firstName: no debe estar vacío, el tamaño debe estar entre 2 y 45.'", 
 			"'   ','ERRORES: firstName: no debe estar vacío.'", 
 			"A,'ERRORES: firstName: el tamaño debe estar entre 2 y 45.'",

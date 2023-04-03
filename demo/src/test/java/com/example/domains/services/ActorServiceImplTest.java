@@ -44,7 +44,8 @@ class ActorServiceImplTest {
 		when(dao.findAll()).thenReturn(lista);
 		var rslt = srv.getAll();
 		assertThat(rslt.size()).isEqualTo(3);
-	}
+		verify(dao, times(1)).findAll();
+		}
 	@Test
 	void testGetOne_valid() {
 		List<Actor> lista = new ArrayList<>(
