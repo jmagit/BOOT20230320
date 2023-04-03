@@ -71,12 +71,49 @@ public class PersonasBatchConfiguration {
 				.build();
 	}
 	
+	// DB a CSV
+	
 	@Bean
-	public Job personasJob(PersonasJobListener listener, Step importCSV2DBStep1) {
+	JdbcCursorItemReader<Persona> personaDBItemReader(DataSource dataSource) {
+		return new JdbcCursorItemReaderBuilder<Persona>().name("personaDBItemReader")
+				.sql("SELECT id, nombre, correo, ip FROM personas").dataSource(dataSource)
+				.rowMapper(new BeanPropertyRowMapper<>(Persona.class))
+				.build();
+	}
+
+	@Bean
+	public FlatFileItemWriter<Persona> personaCSVItemWriter() {
+		return new FlatFileItemWriterBuilder<Persona>().name("personaCSVItemWriter")
+				.resource(new FileSystemResource("output/outputData.csv"))
+				.lineAggregator(new DelimitedLineAggregator<Persona>() {
+					{
+						setDelimiter(",");
+						setFieldExtractor(new BeanWrapperFieldExtractor<Persona>() {
+							{
+								setNames(new String[] { "id", "nombre", "correo", "ip" });
+							}
+						});
+					}
+				}).build();
+	}
+	
+	@Bean
+	public Step exportDB2CSVStep(JdbcCursorItemReader<Persona> personaDBItemReader) {
+		return new StepBuilder("exportDB2CSVStep", jobRepository)
+				.<Persona, Persona>chunk(100, transactionManager)
+				.reader(personaDBItemReader)
+				.writer(personaCSVItemWriter())
+				.build();
+	}
+
+	@Bean
+	public Job personasJob(PersonasJobListener listener, Step importCSV2DBStep1, 
+			Step exportDB2CSVStep) {
 		return new JobBuilder("personasJob", jobRepository)
 				.incrementer(new RunIdIncrementer())
 				.listener(listener)
 				.start(importCSV2DBStep1)
+				.next(exportDB2CSVStep)
 				.build();
 	}
 
