@@ -106,13 +106,30 @@ public class PersonasBatchConfiguration {
 				.build();
 	}
 
+	// Tasklet
+	@Bean
+	public FTPLoadTasklet ftpLoadTasklet(@Value("${input.dir.name:./ftp}") String dir) {
+		FTPLoadTasklet tasklet = new FTPLoadTasklet();
+		tasklet.setDirectoryResource(new FileSystemResource(dir));
+		return tasklet;
+	}
+
+	@Bean
+	public Step copyFilesInDir(FTPLoadTasklet ftpLoadTasklet) {
+	        return new StepBuilder("copyFilesInDir", jobRepository)
+	            .tasklet(ftpLoadTasklet, transactionManager)
+	            .build();
+	}
+
+
 	@Bean
 	public Job personasJob(PersonasJobListener listener, Step importCSV2DBStep1, 
-			Step exportDB2CSVStep) {
+			Step exportDB2CSVStep, Step copyFilesInDir) {
 		return new JobBuilder("personasJob", jobRepository)
 				.incrementer(new RunIdIncrementer())
 				.listener(listener)
-				.start(importCSV2DBStep1)
+				.start(copyFilesInDir)
+				.next(importCSV2DBStep1)
 				.next(exportDB2CSVStep)
 				.build();
 	}
