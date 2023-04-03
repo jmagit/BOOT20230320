@@ -38,4 +38,27 @@ public class PersonasBatchConfiguration {
 	@Autowired
 	PlatformTransactionManager transactionManager;
 	
+	public FlatFileItemReader<PersonaDTO> personaCSVItemReader(String fname) {
+		return new FlatFileItemReaderBuilder<PersonaDTO>().name("personaCSVItemReader")
+				.resource(new ClassPathResource(fname))
+				.linesToSkip(1)
+				.delimited()
+				.names(new String[] { "id", "nombre", "apellidos", "correo", "sexo", "ip" })
+				.fieldSetMapper(new BeanWrapperFieldSetMapper<PersonaDTO>() { {
+						setTargetType(PersonaDTO.class);
+					}})
+				.build();
+	}
+	@Autowired
+	public PersonaItemProcessor personaItemProcessor;
+
+	@Bean
+	public JdbcBatchItemWriter<Persona> personaDBItemWriter(DataSource dataSource) {
+		return new JdbcBatchItemWriterBuilder<Persona>()
+				.itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
+				.sql("INSERT INTO personas VALUES (:id,:nombre,:correo,:ip)")
+				.dataSource(dataSource)
+				.build();
+	}
+
 }
