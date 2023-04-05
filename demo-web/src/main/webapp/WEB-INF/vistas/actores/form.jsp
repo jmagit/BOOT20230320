@@ -3,6 +3,7 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="sf" %>
 <%@ include file="../parts/header.jsp" %>
 <sf:form modelAttribute="elemento" action="${pageContext.request.contextPath}/${action}">
+	<sf:errors cssClass="d-block p-2 bg-danger text-white"/>
 	<div class="form-group">
 		<sf:label path="actorId"><s:message code="actores.form.id" /></sf:label>
 		<c:if test = '${modo == "add"}'>
