@@ -17,6 +17,28 @@
 - [Visual Studio Code](https://code.visualstudio.com/download)
 - [Node.js](https://nodejs.org/es)
 
+#### Extensiones Visual Studio Code
+
+- <https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode>
+- <https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker>
+- <https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker-spanish>
+- <https://marketplace.visualstudio.com/items?itemName=VisualStudioExptTeam.vscodeintellicode>
+- <https://marketplace.visualstudio.com/items?itemName=MS-CEINTL.vscode-language-pack-es>
+- <https://marketplace.visualstudio.com/items?itemName=formulahendry.auto-close-tag>
+- <https://marketplace.visualstudio.com/items?itemName=formulahendry.auto-rename-tag>
+- <https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig>
+- <https://marketplace.visualstudio.com/items?itemName=dsznajder.es7-react-js-snippets>
+- <https://marketplace.visualstudio.com/items?itemName=Zignd.html-css-class-completion>
+- <https://marketplace.visualstudio.com/items?itemName=christian-kohler.path-intellisense>
+- <https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint>
+- <https://marketplace.visualstudio.com/items?itemName=Orta.vscode-jest>
+
+#### ORM
+
+    npm install sequelize mysql2  
+    npm install sequelize-auto --save-dev  
+    npx sequelize-auto -o "./models" -e mysql -h localhost -p 3306 -d sakila -u root -x root
+
 ## Documentación
 
 - https://docs.spring.io/spring-boot/docs/current/reference/html/
@@ -30,7 +52,15 @@
 - https://docs.spring.io/spring-cloud-config/docs/current/reference/html/
 - https://docs.spring.io/spring-security/reference/index.html
 - [PATRONES de DISEÑO](https://refactoring.guru/es/design-patterns)
-- [Markdown](https://markdown.es/sintaxis-markdown/)
+- [Markdown (es)](https://markdown.es/sintaxis-markdown/)
+- [Markdown](https://www.markdownguide.org/basic-syntax/)
+
+### Fundamentos Front end
+
+- <https://www.w3schools.com/html>
+- <https://www.w3schools.com/css>
+- [El Tutorial de JavaScript Moderno](https://es.javascript.info/)
+- <https://developer.mozilla.org/es/docs>
 
 ## Ejemplos
 
@@ -40,7 +70,7 @@
 
 ## Ejercicios
 
-- https://github.com/emilybache/GildedRose-Refactoring-Kata
+- [Kata: Gilded Rose](https://github.com/emilybache/GildedRose-Refactoring-Kata/blob/master/GildedRoseRequirements_es.md)
 
 ## Base de datos de ejemplos
 
