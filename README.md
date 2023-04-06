@@ -11,6 +11,7 @@
 - [Maven](https://maven.apache.org/download.cgi)
 - [WSL2](https://learn.microsoft.com/en-us/windows/wsl/install)
 - [Docker](https://www.docker.com/get-started/)
+- [Postman](https://www.postman.com/downloads/)
 
 ### Front end
 

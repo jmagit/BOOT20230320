@@ -39,7 +39,7 @@ public class LanguageServiceImpl implements LanguageService {
 		if(item == null)
 			throw new InvalidDataException("No puede ser nulo");
 		if(item.isInvalid())
-			throw new InvalidDataException(item.getErrorsMessage());
+			throw new InvalidDataException(item.getErrorsMessage(), item.getErrorsFields());
 		if(dao.existsById(item.getLanguageId()))
 			throw new DuplicateKeyException(item.getErrorsMessage());
 		
@@ -51,7 +51,7 @@ public class LanguageServiceImpl implements LanguageService {
 		if(item == null)
 			throw new InvalidDataException("No puede ser nulo");
 		if(item.isInvalid())
-			throw new InvalidDataException(item.getErrorsMessage());
+			throw new InvalidDataException(item.getErrorsMessage(), item.getErrorsFields());
 		if(!dao.existsById(item.getLanguageId()))
 			throw new NotFoundException();
 		

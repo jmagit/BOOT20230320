@@ -64,7 +64,7 @@ public class ActorServiceImpl implements ActorService {
 		if(item == null)
 			throw new InvalidDataException("No puede ser nulo");
 		if(item.isInvalid())
-			throw new InvalidDataException(item.getErrorsMessage());
+			throw new InvalidDataException(item.getErrorsMessage(), item.getErrorsFields());
 		if(dao.existsById(item.getActorId()))
 			throw new DuplicateKeyException(item.getErrorsMessage());
 		
@@ -76,7 +76,7 @@ public class ActorServiceImpl implements ActorService {
 		if(item == null)
 			throw new InvalidDataException("No puede ser nulo");
 		if(item.isInvalid())
-			throw new InvalidDataException(item.getErrorsMessage());
+			throw new InvalidDataException(item.getErrorsMessage(), item.getErrorsFields());
 		if(!dao.existsById(item.getActorId()))
 			throw new NotFoundException();
 		
