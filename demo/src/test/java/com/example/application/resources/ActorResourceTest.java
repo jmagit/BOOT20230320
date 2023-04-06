@@ -80,12 +80,12 @@ class ActorResourceTest {
 
 	@Test
 	void testGetAllPageable() throws Exception {
-		List<ActorDTO> lista = new ArrayList<>(
-		        Arrays.asList(new ActorDTO(1, "Pepito", "Grillo"),
-		        		new ActorDTO(2, "Carmelo", "Coton"),
-		        		new ActorDTO(3, "Capitan", "Tan")));
+		List<ActorShort> lista = new ArrayList<>(
+		        Arrays.asList(new ActorShortMock(1, "Pepito Grillo"),
+		        		new ActorShortMock(2, "Carmelo Coton"),
+		        		new ActorShortMock(3, "Capitan Tan")));
 
-		when(srv.getByProjection(PageRequest.of(0, 20), ActorDTO.class))
+		when(srv.getByProjection(PageRequest.of(0, 20), ActorShort.class))
 			.thenReturn(new PageImpl<>(lista));
 		mockMvc.perform(get("/api/actores/v1").queryParam("page", "0"))
 			.andExpectAll(
@@ -115,7 +115,7 @@ class ActorResourceTest {
 		when(srv.getOne(id)).thenReturn(Optional.empty());
 		mockMvc.perform(get("/api/actores/v1/{id}", id))
 			.andExpect(status().isNotFound())
-			.andExpect(jsonPath("$.error").value("Not found"))
+			.andExpect(jsonPath("$.title").value("Not Found"))
 	        .andDo(print());
 	}
 
