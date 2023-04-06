@@ -1,0 +1,8 @@
+# mvnw clean package
+FROM openjdk:17-alpine
+COPY target/ms.apigateway-0.0.1-SNAPSHOT.jar /usr/app.jar
+EXPOSE 8080
+ENTRYPOINT ["java","-jar","/usr/app.jar"]
+# docker build -t ms-apigateway-server .
+# docker run -d --name ms-apigateway-server -p 8080:8080 --network microservicios --env DISCOVERY_URL=http://ms-eureka-server:8761 --env FRONTEND_URL=http://angular-server:3000/ ms-apigateway-server
+# docker run -d --name ms-apigateway-server -p 8080:8080 --network microservicios --env DISCOVERY_URL=http://ms-eureka-server:8761 --env FRONTEND_URL=http://host.docker.internal:3000/ ms-apigateway-server

@@ -1,0 +1,9 @@
+# mvnw clean package -DskipTests
+FROM openjdk:17-alpine
+COPY target/contactos-1.0.jar /usr/app.jar
+EXPOSE 8008
+ENTRYPOINT ["java","-jar","/usr/app.jar"]
+# CMD ["java","-jar","/usr/app.jar"]
+
+# docker build -t ms-contactos .
+# docker run -d --name ms-contactos -p 8008:8008 --network microservicios --env DB_SERVER=mongodb:27017 --env DISCOVERY_URL=http://ms-eureka-server:8761 --env CONFIGSRV_URL=http://ms-config-server:8888/ --env ADMINSRV_URL=http://host.docker.internal:8081 --env ZIPKINSRV_URL=http://zipkin:9411 ms-contactos
