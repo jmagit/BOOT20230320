@@ -4,6 +4,9 @@ import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -25,6 +29,7 @@ import com.example.exceptions.DuplicateKeyException;
 import com.example.exceptions.InvalidDataException;
 import com.example.exceptions.NotFoundException;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
 import org.springframework.http.HttpStatus;
@@ -36,8 +41,15 @@ public class ActorResource {
 	private ActorService srv;
 
 	@GetMapping
-	public List<ActorDTO> getAll() {
-		return srv.getByProjection(ActorDTO.class);
+	public List<ActorShort> getAll(@RequestParam(required = false) String sort) {
+		if(sort != null)
+			return (List<ActorShort>)srv.getByProjection(Sort.by(sort), ActorShort.class);
+		return srv.getByProjection(ActorShort.class);
+	}
+	
+	@GetMapping(params = "page")
+	public Page<ActorShort> getAll(Pageable pageable) {
+		return srv.getByProjection(pageable, ActorShort.class);
 	}
 
 	@GetMapping(path = "/{id}")
@@ -46,6 +58,15 @@ public class ActorResource {
 		if(item.isEmpty())
 			throw new NotFoundException();
 		return ActorDTO.from(item.get());
+	}
+	
+	@GetMapping(path = "/{id}/pelis")
+	@Transactional
+	public ActorDTO getPelis(@PathVariable int id) throws NotFoundException {
+		var item = srv.getOne(id);
+		if(item.isEmpty())
+			throw new NotFoundException();
+		return item.get().getFilmActors();
 	}
 	
 	@PostMapping
