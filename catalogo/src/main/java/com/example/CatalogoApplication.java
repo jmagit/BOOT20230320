@@ -1,21 +1,29 @@
 package com.example;
 
-import java.math.BigDecimal;
+import java.util.TreeMap;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springdoc.core.customizers.OpenApiCustomizer;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
-import com.example.domains.contracts.services.FilmService;
-import com.example.domains.entities.Actor;
-import com.example.domains.entities.Film;
-import com.example.domains.entities.Film.Rating;
+import io.swagger.v3.oas.annotations.ExternalDocumentation;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Contact;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.info.License;
 
-import jakarta.transaction.Transactional;
-
-import com.example.domains.entities.Language;
-
+@OpenAPIDefinition(
+        info = @Info(
+                title = "Microservicio: Catalogo de peliculas",
+                version = "1.0",
+                description = "Ejemplo de Microservicio utilizando la base de datos **Sakila**.",
+                license = @License(name = "Apache 2.0", url = "https://www.apache.org/licenses/LICENSE-2.0.html"),
+                contact = @Contact(name = "Javier Martín", url = "https://github.com/jmagit", email = "support@example.com")
+        ),
+        externalDocs = @ExternalDocumentation(description = "Documentación del proyecto", url = "https://github.com/jmagit/REM20221114")
+)
 @SpringBootApplication
 public class CatalogoApplication implements CommandLineRunner {
 
@@ -23,32 +31,17 @@ public class CatalogoApplication implements CommandLineRunner {
 		SpringApplication.run(CatalogoApplication.class, args);
 	}
 
-	@Autowired
-	FilmService srv;
-	
 	@Override
-	@Transactional
 	public void run(String... args) throws Exception {
 		System.out.println("------------------> Aplicacion iniciada");
-		var peli = new Film("Hola mundo", new Language(2), (byte)1, new BigDecimal(10.0), 1, new BigDecimal(10.0));
-//		peli.setRating(Rating.ADULTS_ONLY);
-//		peli.addActor(1);
-//		peli.addActor(2);
-//		peli.addActor(3);
-//		peli.addCategory(2);
-//		peli.addCategory(4);
-//		System.out.println(peli.getErrorsMessage());
-//		peli = srv.add(peli);
-//		System.out.println(peli.getFilmId());
-//		peli = srv.getOne(1001).get();
-//		peli.removeActor(new Actor(1));
-//		peli.removeActor(new Actor(2));
-//		peli.addActor(4);
-//		peli.removeCategory(peli.getCategories().get(0));
-//		peli.addCategory(1);
-//		peli.setTitle("Adios mundo");
-//		srv.modify(peli);
-		srv.deleteById(1001);
 	}
+
+    @Bean
+    OpenApiCustomizer sortSchemasAlphabetically() {
+        return openApi -> {
+            var schemas = openApi.getComponents().getSchemas();
+            openApi.getComponents().setSchemas(new TreeMap<>(schemas));
+        };
+    }
 
 }

@@ -62,6 +62,8 @@
 - <https://www.w3schools.com/css>
 - [El Tutorial de JavaScript Moderno](https://es.javascript.info/)
 - <https://developer.mozilla.org/es/docs>
+- <https://github.com/Asabeneh/30-Days-Of-JavaScript>
+- <https://github.com/Asabeneh/30-Days-Of-React>
 
 ## Ejemplos
 
