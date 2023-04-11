@@ -31,6 +31,14 @@ public class DemoApplication implements CommandLineRunner {
 	}
 
 //	@Bean
+//	public OpenApiCustomiser sortSchemasAlphabetically() {
+//	    return openApi -> {
+//	        var schemas = openApi.getComponents().getSchemas();
+//	        openApi.getComponents().setSchemas(new TreeMap<>(schemas));
+//	    };
+//	}
+
+//	@Bean
 //	@Primary
 //	public RestTemplate restTemplate() {
 //		return new RestTemplate();
