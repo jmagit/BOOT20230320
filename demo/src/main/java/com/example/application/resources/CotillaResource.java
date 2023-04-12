@@ -27,6 +27,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import com.example.application.proxies.CatalogoProxy;
+import com.example.application.proxies.PhotoProxy;
 import com.example.domains.entities.dtos.PelisDto;
 
 //import com.example.application.proxies.CatalogoProxy;
@@ -77,10 +79,10 @@ public class CotillaResource {
 	
 	@GetMapping(path = "/pelis/rt")
 	public List<PelisDto> getPelisRT() {
-//		ResponseEntity<List<PelisDto>> response = srv.exchange(
-//				"lb://CATALOGO-SERVICE/v1/peliculas?mode=short", 
 		ResponseEntity<List<PelisDto>> response = srvLB.exchange(
-				"http://localhost:8010/v1/peliculas?mode=short", 
+				"lb://CATALOGO-SERVICE/peliculas/v1?mode=short", 
+//		ResponseEntity<List<PelisDto>> response = srv.exchange(
+//				"http://localhost:8010/peliculas/v1?mode=short", 
 				HttpMethod.GET,
 				HttpEntity.EMPTY, 
 				new ParameterizedTypeReference<List<PelisDto>>() {}
@@ -89,8 +91,8 @@ public class CotillaResource {
 	}
 	@GetMapping(path = "/pelis/{id}/rt")
 	public PelisDto getPelisRT(@PathVariable int id) {
-		return srvLB.getForObject("lb://CATALOGO-SERVICE/v1/peliculas/{key}?mode=short", PelisDto.class, id);
-//		return srv.getForObject("http://localhost:8010/v1/peliculas/{key}?mode=short", PelisDto.class, id);
+		return srvLB.getForObject("lb://CATALOGO-SERVICE/peliculas/v1/{key}?mode=short", PelisDto.class, id);
+//		return srv.getForObject("http://localhost:8010/peliculas/v1/{key}?mode=short", PelisDto.class, id);
 	}
 	@GetMapping(path = "/balancea/rt")
 	public List<String> getBalanceoRT() {
@@ -109,30 +111,30 @@ public class CotillaResource {
 		rslt.add("Final: " + fin + " (" + inicio.until(fin, ChronoUnit.MILLIS) + " ms)");		
 		return rslt;
 	}
-//	
-//	@Autowired
-//	CatalogoProxy proxy;
-//
-//	@GetMapping(path = "/pelis/proxy")
-//	public List<PelisDto> getPelisProxy() {
-//		return proxy.getPelis();
-//	}
-//
-//	@GetMapping(path = "/pelis/{id}/proxy")
-//	public PelisDto getPelisProxy(@PathVariable int id) {
-//		return proxy.getPeli(id);
-//	}
-//	@GetMapping(path = "/balancea/proxy")
-//	public List<String> getBalanceoProxy() {
-//		List<String> rslt = new ArrayList<>();
-//		for(int i = 0; i < 11; i++)
-//			try {
-//				rslt.add(proxy.getInfo());
-//			} catch (Exception e) {
-//				rslt.add(e.getMessage());
-//			}
-//		return rslt;
-//	}
+	
+	@Autowired
+	CatalogoProxy proxy;
+
+	@GetMapping(path = "/pelis/proxy")
+	public List<PelisDto> getPelisProxy() {
+		return proxy.getPelis();
+	}
+
+	@GetMapping(path = "/pelis/{id}/proxy")
+	public PelisDto getPelisProxy(@PathVariable int id) {
+		return proxy.getPeli(id);
+	}
+	@GetMapping(path = "/balancea/proxy")
+	public List<String> getBalanceoProxy() {
+		List<String> rslt = new ArrayList<>();
+		for(int i = 0; i < 11; i++)
+			try {
+				rslt.add(proxy.getInfo());
+			} catch (Exception e) {
+				rslt.add(e.getMessage());
+			}
+		return rslt;
+	}
 	
 	
 	
@@ -200,12 +202,12 @@ public class CotillaResource {
 //		return config;
 //	}
 
-//	@Autowired
-//	PhotoProxy proxyExterno;
-//	@GetMapping(path = "/fotos")
-//	public List<PhotoDTO> getFotosProxy() {
-//		return proxyExterno.getAll();
-//	}
+	@Autowired
+	PhotoProxy proxyExterno;
+	@GetMapping(path = "/fotos")
+	public List<PhotoDTO> getFotosProxy() {
+		return proxyExterno.getAll();
+	}
 
 	
 	

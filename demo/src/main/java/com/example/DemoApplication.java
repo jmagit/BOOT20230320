@@ -5,6 +5,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.PageRequest;
@@ -25,6 +26,7 @@ import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 
 @SpringBootApplication
+@EnableFeignClients(basePackages = "com.example.application.proxies")
 public class DemoApplication implements CommandLineRunner {
 
 	public static void main(String[] args) {
