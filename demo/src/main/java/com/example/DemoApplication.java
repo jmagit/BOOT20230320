@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.PageRequest;
@@ -30,25 +31,17 @@ public class DemoApplication implements CommandLineRunner {
 		SpringApplication.run(DemoApplication.class, args);
 	}
 
-//	@Bean
-//	public OpenApiCustomiser sortSchemasAlphabetically() {
-//	    return openApi -> {
-//	        var schemas = openApi.getComponents().getSchemas();
-//	        openApi.getComponents().setSchemas(new TreeMap<>(schemas));
-//	    };
-//	}
+	@Bean
+	@Primary
+	public RestTemplate restTemplate() {
+		return new RestTemplate();
+	}
 
-//	@Bean
-//	@Primary
-//	public RestTemplate restTemplate() {
-//		return new RestTemplate();
-//	}
-//
-//	@Bean
-//	@LoadBalanced
-//	public RestTemplate restTemplateLB() {
-//		return new RestTemplate();
-//	}
+	@Bean
+	@LoadBalanced
+	public RestTemplate restTemplateLB() {
+		return new RestTemplate();
+	}
 
 //	@Autowired
 //	ActorRepository dao;

@@ -9,10 +9,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-//import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.ServiceInstance;
 //import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
-//import org.springframework.cloud.client.discovery.DiscoveryClient;
-//import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 //import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -31,16 +31,16 @@ import com.example.domains.entities.dtos.PelisDto;
 
 //import com.example.application.proxies.CatalogoProxy;
 //import com.example.application.proxies.PhotoProxy;
-//import com.example.domains.entities.dtos.PelisDto;
-//import com.example.domains.entities.dtos.PhotoDTO;
-//import com.netflix.appinfo.InstanceInfo;
-//import com.netflix.discovery.EurekaClient;
-//
+import com.example.domains.entities.dtos.PelisDto;
+import com.example.domains.entities.dtos.PhotoDTO;
+import com.netflix.appinfo.InstanceInfo;
+import com.netflix.discovery.EurekaClient;
+
 //import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 //import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-//import io.micrometer.observation.annotation.Observed;
-//import io.swagger.v3.oas.annotations.Parameter;
-//import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.micrometer.observation.annotation.Observed;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 /**
  * Ejemplos de conexiones
@@ -51,68 +51,77 @@ import com.example.domains.entities.dtos.PelisDto;
 @RestController
 @RequestMapping(path = "/api/cotilla")
 public class CotillaResource {
-//	@Autowired
-//	RestTemplate srv;
-//
-//	@Autowired
-//	@LoadBalanced
-//	RestTemplate srvLB;
+	@Autowired
+	RestTemplate srv;
 
-//	@Autowired
-//	private EurekaClient discoveryEurekaClient;
-//
-//	@GetMapping(path = "/descubre/eureka/{nombre}")
-//	public InstanceInfo serviceEurekaUrl(String nombre) {
-//	    InstanceInfo instance = discoveryEurekaClient.getNextServerFromEureka(nombre, false);
-//	    return instance; //.getHomePageUrl();
-//	}
-//	
-//	@Autowired
-//	private DiscoveryClient discoveryClient;
-//
-//	@GetMapping(path = "/descubre/cloud/{nombre}")
-//	public List<ServiceInstance> serviceUrl(String nombre) {
-//	    return discoveryClient.getInstances(nombre);
-//	}
+	@Autowired
+	@LoadBalanced
+	RestTemplate srvLB;
+
+	@Autowired
+	private EurekaClient discoveryEurekaClient;
+
+	@GetMapping(path = "/descubre/eureka/{nombre}")
+	public InstanceInfo serviceEurekaUrl(String nombre) {
+	    InstanceInfo instance = discoveryEurekaClient.getNextServerFromEureka(nombre, false);
+	    return instance; //.getHomePageUrl();
+	}
 	
-//	@GetMapping(path = "/balancea/rt")
-//	public List<String> getBalanceoRT() {
-//		List<String> rslt = new ArrayList<>();
-//		LocalDateTime inicio = LocalDateTime.now();
-//		rslt.add("Inicio: " + inicio);
-//		for(int i = 0; i < 11; i++)
-//			try {
-//				LocalTime ini = LocalTime.now();
-//				rslt.add(srvLB.getForObject("lb://CATALOGO-SERVICE/actuator/info", String.class)
-//						+ " (" + ini.until(LocalTime.now(), ChronoUnit.MILLIS) + " ms)" );
-//			} catch (Exception e) {
-//				rslt.add(e.getMessage());
-//			}
-//		LocalDateTime fin = LocalDateTime.now();
-//		rslt.add("Final: " + fin + " (" + inicio.until(fin, ChronoUnit.MILLIS) + " ms)");		
-//		return rslt;
-//	}
-//	@GetMapping(path = "/pelis/rt")
-//	public List<PelisDto> getPelisRT() {
-////		ResponseEntity<List<PelisDto>> response = srv.exchange(
-////				"lb://CATALOGO-SERVICE/v1/peliculas?mode=short", 
-//		ResponseEntity<List<PelisDto>> response = srvLB.exchange(
-//				"http://localhost:8010/v1/peliculas?mode=short", 
-//				HttpMethod.GET,
-//				HttpEntity.EMPTY, 
-//				new ParameterizedTypeReference<List<PelisDto>>() {}
-//		);
-//		return response.getBody();
-//	}
-//	@GetMapping(path = "/pelis/{id}/rt")
-//	public PelisDto getPelisRT(@PathVariable int id) {
-//		return srvLB.getForObject("lb://CATALOGO-SERVICE/v1/peliculas/{key}?mode=short", PelisDto.class, id);
-////		return srv.getForObject("http://localhost:8010/v1/peliculas/{key}?mode=short", PelisDto.class, id);
-//	}
+	@Autowired
+	private DiscoveryClient discoveryClient;
+
+	@GetMapping(path = "/descubre/cloud/{nombre}")
+	public List<ServiceInstance> serviceUrl(String nombre) {
+	    return discoveryClient.getInstances(nombre);
+	}
+	
+	@GetMapping(path = "/pelis/rt")
+	public List<PelisDto> getPelisRT() {
+//		ResponseEntity<List<PelisDto>> response = srv.exchange(
+//				"lb://CATALOGO-SERVICE/v1/peliculas?mode=short", 
+		ResponseEntity<List<PelisDto>> response = srvLB.exchange(
+				"http://localhost:8010/v1/peliculas?mode=short", 
+				HttpMethod.GET,
+				HttpEntity.EMPTY, 
+				new ParameterizedTypeReference<List<PelisDto>>() {}
+		);
+		return response.getBody();
+	}
+	@GetMapping(path = "/pelis/{id}/rt")
+	public PelisDto getPelisRT(@PathVariable int id) {
+		return srvLB.getForObject("lb://CATALOGO-SERVICE/v1/peliculas/{key}?mode=short", PelisDto.class, id);
+//		return srv.getForObject("http://localhost:8010/v1/peliculas/{key}?mode=short", PelisDto.class, id);
+	}
+	@GetMapping(path = "/balancea/rt")
+	public List<String> getBalanceoRT() {
+		List<String> rslt = new ArrayList<>();
+		LocalDateTime inicio = LocalDateTime.now();
+		rslt.add("Inicio: " + inicio);
+		for(int i = 0; i < 11; i++)
+			try {
+				LocalTime ini = LocalTime.now();
+				rslt.add(srvLB.getForObject("lb://CATALOGO-SERVICE/actuator/info", String.class)
+						+ " (" + ini.until(LocalTime.now(), ChronoUnit.MILLIS) + " ms)" );
+			} catch (Exception e) {
+				rslt.add(e.getMessage());
+			}
+		LocalDateTime fin = LocalDateTime.now();
+		rslt.add("Final: " + fin + " (" + inicio.until(fin, ChronoUnit.MILLIS) + " ms)");		
+		return rslt;
+	}
 //	
 //	@Autowired
 //	CatalogoProxy proxy;
 //
+//	@GetMapping(path = "/pelis/proxy")
+//	public List<PelisDto> getPelisProxy() {
+//		return proxy.getPelis();
+//	}
+//
+//	@GetMapping(path = "/pelis/{id}/proxy")
+//	public PelisDto getPelisProxy(@PathVariable int id) {
+//		return proxy.getPeli(id);
+//	}
 //	@GetMapping(path = "/balancea/proxy")
 //	public List<String> getBalanceoProxy() {
 //		List<String> rslt = new ArrayList<>();
@@ -124,15 +133,8 @@ public class CotillaResource {
 //			}
 //		return rslt;
 //	}
-//	@GetMapping(path = "/pelis/proxy")
-//	public List<PelisDto> getPelisProxy() {
-//		return proxy.getPelis();
-//	}
-//
-//	@GetMapping(path = "/pelis/{id}/proxy")
-//	public PelisDto getPelisProxy(@PathVariable int id) {
-//		return proxy.getPeli(id);
-//	}
+	
+	
 	
 //	@PostMapping(path = "/pelis/{id}/like")
 //	public String getPelisLike(@PathVariable int id, @Parameter(hidden = true) @RequestHeader(required = false) String authorization) {
