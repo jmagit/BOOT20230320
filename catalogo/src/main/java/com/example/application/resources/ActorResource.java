@@ -3,6 +3,7 @@ package com.example.application.resources;
 import java.net.URI;
 import java.util.List;
 
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -49,7 +50,7 @@ public class ActorResource {
 	}
 	
 	@GetMapping(params = "page")
-	public Page<ActorShort> getAll(Pageable pageable) {
+	public Page<ActorShort> getAll(@ParameterObject Pageable pageable) {
 		return srv.getByProjection(pageable, ActorShort.class);
 	}
 

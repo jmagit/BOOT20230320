@@ -1,0 +1,9 @@
+# mvnw clean package -DskipTests
+FROM openjdk:17-alpine
+COPY target/catalogo-1.0.jar /usr/app.jar
+EXPOSE 8010
+ENTRYPOINT ["java","-jar","/usr/app.jar"]
+# CMD ["java","-jar","/usr/app.jar"]
+
+# docker build -t ms-catalogo .
+# docker run -d --name ms-catalogo -p 8010:8010 --env DISCOVERY_URL=http://host.docker.internal:8761 --env SAKILA_DB=host.docker.internal ms-catalogo

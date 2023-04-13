@@ -6,6 +6,7 @@ import java.time.Instant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.application.resources.LanguageResource;
 import com.example.domains.contracts.services.ActorService;
 import com.example.domains.contracts.services.CategoryService;
 import com.example.domains.contracts.services.FilmService;
@@ -23,7 +24,8 @@ public class CatalogoServiceImpl implements CatalogoService {
 	@Autowired
 	private CategoryService categorySrv;
 	@Autowired
-	private LanguageService languageSrv;
+	private LanguageResource languageSrv;
+//	private LanguageService languageSrv;
 
 	@Override
 	public NovedadesDTO novedades(Timestamp fecha) {
