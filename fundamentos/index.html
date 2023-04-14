@@ -12,16 +12,25 @@
     <script src="demo.js"></script>
     <script src="otro.js"></script>
     <script>
-        let x = "En la pagina"
-        console.log('Hola mundo')
-        usaKK();
-        // usaKK = 4;
-        console.log(usaKK)
-        (function() {
-            for(let i=0; i < 10; i++) {
-                // ...
-            }
-        })()
+        // let x = "En la pagina"
+        // console.log('Hola mundo')
+        // usaKK();
+        // // usaKK = 4;
+        // console.log(usaKK)
+        // (function() {
+        //     for(let i=0; i < 10; i++) {
+        //         // ...
+        //     }
+        // })()
+   </script>
+   <script type="module">
+        import * as m1 from './modulo1.js'
+        import {nombre, calc, display } from './modulo2.js'
+
+        console.log(m1.nombre, m1.calc(2, 2))
+        console.log(nombre, calc(2,2))
+        display();
+
    </script>
 </body>
 </html>
