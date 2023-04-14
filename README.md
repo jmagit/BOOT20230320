@@ -11,6 +11,7 @@
 - [Maven](https://maven.apache.org/download.cgi)
 - [WSL2](https://learn.microsoft.com/en-us/windows/wsl/install)
 - [Docker](https://www.docker.com/get-started/)
+- [HeidiSQL](https://www.heidisql.com/download.php)
 - [Postman](https://www.postman.com/downloads/)
 
 ### Front end
@@ -65,6 +66,12 @@
 - <https://github.com/Asabeneh/30-Days-Of-JavaScript>
 - <https://github.com/Asabeneh/30-Days-Of-React>
 
+#### Ejercicios de refuerzo
+
+  1. <https://www.discoduroderoer.es/category/ejercicio/javascript-ejercicio/>
+  2. <https://www.arkaitzgarro.com/javascript/capitulo-18.html>
+  3. <https://uniwebsidad.com/libros/javascript/capitulo-11>
+
 ## Ejemplos
 
 - https://github.com/spring-projects/spring-data-examples
@@ -84,6 +91,11 @@
 
 - https://downloads.mysql.com/archives/get/p/3/file/mysql-connector-java-5.1.49.zip  
 - https://sourceforge.net/projects/hibernate/files/hibernate-orm/5.6.5.Final/hibernate-release-5.6.5.Final.zip/download
+
+## Bibliotecas React
+
+- <https://github.com/enaqx/awesome-react>
+- <https://www.primefaces.org/primereact/>
 
 ## Servidores en Docker
 
