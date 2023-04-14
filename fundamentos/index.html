@@ -24,9 +24,10 @@
         // })()
    </script>
    <script type="module">
-        import * as m1 from './modulo1.js'
-        import {nombre, calc, display } from './modulo2.js'
-        import {nombre as nombre2} from './modulo1.js'
+        import * as m1 from './modulos/modulo1.js'
+        import {nombre, calc, display } from './modulos/modulo2.js'
+        import {nombre as nombre2} from './modulos/modulo1.js'
+        // import {display} from './modulos/index.js'
 
         console.log(m1.nombre, m1.calc(2, 2))
         console.log(nombre, calc(2,2))
