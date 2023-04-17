@@ -7,9 +7,9 @@
     <title>Ejemplos del curso</title>
     <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.css">
     <script>
-        document.onLoad = ev => {
-            console.log('Documento cargado')
-        }
+        document.addEventListener("DOMContentLoaded", (event) => {
+            console.log("DOM fully loaded and parsed");
+        });
     </script>
 </head>
 
@@ -21,40 +21,40 @@
             <span>+</span>
             <input type="number" id="op2" value="0">
             <input type="button" value="=">
-             <output>0</output>
+            <output>0</output>
         </div>
         <div>
             <button type="button" id="btnLista">Lista</button>
-           <ul id="lista">
+            <ul id="lista">
 
-           </ul>
+            </ul>
         </div>
     </main>
     <script>
         (function () {
             let result = document.querySelector('output')
-            if(localStorage && localStorage.result) {
-                    result.textContent = localStorage.result
-                    result.textContent = localStorage.getItem('result')
-                }
+            if (localStorage && localStorage.result) {
+                result.textContent = localStorage.result
+                result.textContent = localStorage.getItem('result')
+            }
             let btn = document.querySelector('input[type=button]')
             let suma = ev => {
                 //result.textContent = +document.querySelector('#op1').value + +document.getElementById('op2').value
-                result.innerHTML = `<b>${+document.querySelector('#op1').value + +document.getElementById('op2').value}</b>` 
+                result.innerHTML = `<b>${+document.querySelector('#op1').value + +document.getElementById('op2').value}</b>`
                 //btn.removeEventListener('click', suma)
                 //document.querySelector('span').hidden = !document.querySelector('span').hidden
-                if(localStorage) {
+                if (localStorage) {
                     localStorage.result = +document.querySelector('#op1').value + +document.getElementById('op2').value
                 }
             }
-            localStorage.kk = JSON.stringify({ id: 1, nombre: 'kk'})
+            localStorage.kk = JSON.stringify({ id: 1, nombre: 'kk' })
             btn.addEventListener('click', suma)
             btn.addEventListener('click', ev => {
                 console.log('Botón pulsado')
             })
             document.querySelector('span').addEventListener('dblclick', suma)
             let cad = ''
-            for(let i = 0; i < 10; i++) {
+            for (let i = 0; i < 10; i++) {
                 cad += `<li>Elemento ${i + 1}</li>`
             }
             document.querySelector('#lista').innerHTML = cad
