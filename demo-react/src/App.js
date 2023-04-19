@@ -4,29 +4,84 @@ import './App.css';
 
 import React, { Component } from 'react'
 import { Card, Contador } from './componentes';
+import { ErrorBoundary } from './comunes';
 
 export default class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-        cont: 0
+        cont: 0,
+        main: 0
     }
+    this.menu = [
+      { texto: 'inicio', url: '/', componente: <Home />},
+      { texto: 'demos', url: '/demos', componente: <DemosJSX /> },
+      { texto: 'contador', url: '/contador', componente: <Contador init={69} />},
+      { texto: 'ejemplos', url: '/ejemplos', componente: <Ejemplos />},
+    ]
   }
 
   render() {
     return (
       <>
+        <Cabecera menu={this.menu} onSelectMenu={indice => this.setState({main: indice})} />
         <main className='container-fluid'>
-          <Card tittle="Ejemplo de componente">
-            <Contador init={10} delta={2} 
-              onChange={num => this.setState({cont: num})} />
-          </Card>
-          <p>El contador: {this.state.cont}</p>
+          <ErrorBoundary>
+          {this.menu[this.state.main].componente}
+          </ErrorBoundary>
         </main>
+        <Pie />
       </>
     )
   }
 }
+
+function Cabecera(props) {
+  return (
+    <header>
+      <Menu {...props} />
+    </header>
+  );
+}
+
+function Menu({menu, onSelectMenu}) {
+  return (
+    <nav>
+      {menu.map((item, index) => 
+        <button key={index} type='button' onClick={() => onSelectMenu && onSelectMenu(index)}>{item.texto}</button>)
+      }
+    </nav>
+  );
+}
+
+function Pie() {
+  return null;
+}
+
+class Ejemplos extends Component {
+    constructor(props) {
+      super(props)
+      this.state = {
+          cont: 0,
+      }
+     }
+  
+    render() {
+      return (
+        <>
+          <main className='container-fluid'>
+            <Card tittle="Ejemplo de componente">
+              <Contador init={10} delta={2} 
+                onChange={num => this.setState({cont: num})} />
+            </Card>
+            <p>El contador: {this.state.cont}</p>
+            <input className='btn btn-bg-danger' type='button' value='No tocar' onClick={() => { throw new Error('No tocar')} } />
+          </main>
+        </>
+      )
+    }
+  }
+
 class DemosJSX extends Component {
   render() {
     let nombre = '<b>mundo</b>'
