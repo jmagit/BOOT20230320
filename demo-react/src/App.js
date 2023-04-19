@@ -7,6 +7,7 @@ import React, { Component } from 'react'
 import { Card, Contador } from './componentes';
 import { ErrorBoundary } from './comunes';
 import Calculadora from './ejercicios/calculadora';
+import Muro from './ejercicios/muro';
 
 export default class App extends Component {
   constructor(props) {
@@ -16,10 +17,11 @@ export default class App extends Component {
       main: 0
     }
     this.menu = [
-      { texto: 'calculadora', url: '/calculadora', componente: <Calculadora /> },
+      { texto: 'muro', url: '/muro', componente: <Muro /> },
       { texto: 'inicio', url: '/', componente: <Home /> },
       { texto: 'demos', url: '/demos', componente: <DemosJSX /> },
       { texto: 'contador', url: '/contador', componente: <Contador init={69} /> },
+      { texto: 'calculadora', url: '/calculadora', componente: <Calculadora /> },
       { texto: 'ejemplos', url: '/ejemplos', componente: <Ejemplos /> },
     ]
   }
