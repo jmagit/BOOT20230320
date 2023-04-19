@@ -1,4 +1,5 @@
 import logo from './logo.svg';
+import myLogo from './imagenes/logo.png'
 import './App.css';
 
 
@@ -10,24 +11,24 @@ export default class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-        cont: 0,
-        main: 0
+      cont: 0,
+      main: 0
     }
     this.menu = [
-      { texto: 'inicio', url: '/', componente: <Home />},
+      { texto: 'inicio', url: '/', componente: <Home /> },
       { texto: 'demos', url: '/demos', componente: <DemosJSX /> },
-      { texto: 'contador', url: '/contador', componente: <Contador init={69} />},
-      { texto: 'ejemplos', url: '/ejemplos', componente: <Ejemplos />},
+      { texto: 'contador', url: '/contador', componente: <Contador init={69} /> },
+      { texto: 'ejemplos', url: '/ejemplos', componente: <Ejemplos /> },
     ]
   }
 
   render() {
     return (
       <>
-        <Cabecera menu={this.menu} onSelectMenu={indice => this.setState({main: indice})} />
+        <Cabecera menu={this.menu} actual={this.state.main} onSelectMenu={indice => this.setState({ main: indice })} />
         <main className='container-fluid'>
           <ErrorBoundary>
-          {this.menu[this.state.main].componente}
+            {this.menu[this.state.main].componente}
           </ErrorBoundary>
         </main>
         <Pie />
@@ -39,48 +40,92 @@ export default class App extends Component {
 function Cabecera(props) {
   return (
     <header>
-      <Menu {...props} />
+      <nav className="navbar navbar-expand-lg bg-body-tertiary">
+        <div className="container-fluid">
+          <a className="navbar-brand" href="#">
+            <img src={myLogo} height={50} alt='Logotipo corporativo' />
+          </a>
+          <button
+            className="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span className="navbar-toggler-icon" />
+          </button>
+          <div className="collapse navbar-collapse" id="navbarSupportedContent">
+            <Menu {...props} />
+            <Buscar />
+          </div>
+        </div>
+      </nav>
+
     </header>
   );
 }
 
-function Menu({menu, onSelectMenu}) {
+function Menu({ menu, actual, onSelectMenu }) {
   return (
-    <nav>
-      {menu.map((item, index) => 
-        <button key={index} type='button' onClick={() => onSelectMenu && onSelectMenu(index)}>{item.texto}</button>)
+    <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+      {menu.map((item, index) =>
+        <li key={index} className="nav-item">
+          <a className={'nav-link' + (actual === index ? ' active' : '')} aria-current="page" href="."
+            onClick={ev => { 
+              ev.preventDefault()
+              onSelectMenu && onSelectMenu(index) 
+            }}>{item.texto}</a>
+        </li>
+      )
       }
-    </nav>
+    </ul>
   );
 }
 
+function Buscar() {
+  return (
+    <form className="d-flex" role="search">
+    <input
+      className="form-control me-2"
+      type="search"
+      placeholder="Search"
+      aria-label="Search"
+    />
+    <button className="btn btn-outline-success" type="submit">
+      Search
+    </button>
+  </form>
+)
+}
 function Pie() {
   return null;
 }
 
 class Ejemplos extends Component {
-    constructor(props) {
-      super(props)
-      this.state = {
-          cont: 0,
-      }
-     }
-  
-    render() {
-      return (
-        <>
-          <main className='container-fluid'>
-            <Card tittle="Ejemplo de componente">
-              <Contador init={10} delta={2} 
-                onChange={num => this.setState({cont: num})} />
-            </Card>
-            <p>El contador: {this.state.cont}</p>
-            <input className='btn btn-bg-danger' type='button' value='No tocar' onClick={() => { throw new Error('No tocar')} } />
-          </main>
-        </>
-      )
+  constructor(props) {
+    super(props)
+    this.state = {
+      cont: 0,
     }
   }
+
+  render() {
+    return (
+      <>
+        <main className='container-fluid'>
+          <Card tittle="Ejemplo de componente">
+            <Contador init={10} delta={2}
+              onChange={num => this.setState({ cont: num })} />
+          </Card>
+          <p>El contador: {this.state.cont}</p>
+          <input className='btn btn-bg-danger' type='button' value='No tocar' onClick={() => { throw new Error('No tocar') }} />
+        </main>
+      </>
+    )
+  }
+}
 
 class DemosJSX extends Component {
   render() {
@@ -92,10 +137,10 @@ class DemosJSX extends Component {
     let limpia = true
     let falsa
     let list = [
-      {id: 1,nombre:'Madrid'},
-      {id: 2,nombre:'Barcelona'},
-      {id: 3,nombre:'Sevilla'},
-      {id: 4,nombre:'Valencia'},
+      { id: 1, nombre: 'Madrid' },
+      { id: 2, nombre: 'Barcelona' },
+      { id: 3, nombre: 'Sevilla' },
+      { id: 4, nombre: 'Valencia' },
     ]
     return (
       <>
@@ -108,13 +153,13 @@ class DemosJSX extends Component {
         <div style={{ color: 'white', backgroundColor: 'red' }}>DemosJSX</div>
         <h2 className={estilo} style={errorStyle} >Hola
           <span dangerouslySetInnerHTML={{ __html: nombre }} /></h2>
-          <ul>
-            {[1,2,3,4, 3, 2, 1].map((item,index) => <li key={index}>Elemento {item}</li>)}
-          </ul>
-          <select>
-            {list.map(item => <option key={item.id} value={item.id}>{item.nombre}</option>)}
-          </select>
-          <img src={logo} className="App-logo" alt="logo" {...dim} hidden={false} />
+        <ul>
+          {[1, 2, 3, 4, 3, 2, 1].map((item, index) => <li key={index}>Elemento {item}</li>)}
+        </ul>
+        <select>
+          {list.map(item => <option key={item.id} value={item.id}>{item.nombre}</option>)}
+        </select>
+        <img src={logo} className="App-logo" alt="logo" {...dim} hidden={false} />
       </>
     )
   }
@@ -122,7 +167,7 @@ class DemosJSX extends Component {
 
 function Home() {
   let url = process.env.REACT_APP_API_URL
-  
+
   return (
     // eslint-disable-next-line jsx-quotes
     <div className="App">
