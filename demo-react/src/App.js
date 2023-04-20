@@ -5,7 +5,7 @@ import './App.css';
 
 import React, { Component } from 'react'
 import { Card, Contador } from './componentes';
-import { ErrorBoundary } from './comunes';
+import { ErrorBoundary } from './biblioteca/comunes';
 import Calculadora from './ejercicios/calculadora';
 import Muro from './ejercicios/muro';
 

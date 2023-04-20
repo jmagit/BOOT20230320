@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ErrorMessage, Esperando } from '../comunes'
+import { ErrorMessage, Esperando, PaginacionCmd as Paginacion } from '../biblioteca/comunes'
 
 class Ficha extends Component {
     // {"id":"0","author":"Alejandro Escamilla","width":5000,"height":3333,"url":"","download_url":"","visible":false}
@@ -29,12 +29,16 @@ export default class Muro extends Component {
         };
         this.page = 0;
         this.totalRecords = 1000;
-        this.rows = 20;
+        this.rows = 35;
+        this.paginas = Math.ceil(1000 / this.rows);
         this.first = 0;
     }
 
-    load(pagina = 0, filas = 20) {
-        this.rows = filas;
+    setError(msg) {
+        this.setState({ error: msg, loading: false })
+    }
+
+    load(pagina = 0) {
         this.setState({ loading: true, errorMsg: null })
         fetch(`https://picsum.photos/v2/list?page=${pagina + 1}&limit=${this.rows}`)
             .then(
@@ -46,7 +50,7 @@ export default class Muro extends Component {
                                 this.first = pagina ? (pagina * this.rows) : 0
                                 this.setState({ listado: data.map(item => ({ ...item, visible: false })), loading: false })
                             },
-                            err => this.setError(`ERROR (respuesta): ${err.status}:2 ${err.statusText}`)
+                            err => this.setError(`ERROR (respuesta): ${err.status}: ${err.statusText}`)
                         )
                     } else {
                         this.setError(`ERROR (servidor): ${resp.status}: ${resp.statusText}`)
@@ -67,9 +71,8 @@ export default class Muro extends Component {
         return (
             <div>
                 {this.state.error && <ErrorMessage msg={this.state.error} />}
+                <Paginacion actual={this.page} total={this.paginas} onChange={num => this.load(num)} />
                 <main className='container-fluid'>
-                    {/* <Paginator first={this.first} rows={this.rows} totalRecords={this.totalRecords} rowsPerPageOptions={[10, 20, 50, 100]} 
-                        onPageChange={e => this.load(e.page, e.rows)} /> */}
                     <div className='row'>
                         {this.state.listado.map((item, index) => <Ficha key={item.id} {...item} onVer={() => this.mostrar(index)} />)}
                     </div>
