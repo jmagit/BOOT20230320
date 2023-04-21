@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/js/bootstrap.bundle'
+import '@fortawesome/fontawesome-free/css/all.css'
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 

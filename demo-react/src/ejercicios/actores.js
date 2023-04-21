@@ -1,6 +1,8 @@
 import React, { Component, useState, useEffect } from "react";
 import { ValidationMessage, ErrorMessage, Esperando, PaginacionCmd as Paginacion } from "../biblioteca/comunes";
 import { titleCase } from '../biblioteca/formateadores';
+import userNotFoundMaleImage from '../imagenes/user-not-found-male.png';
+import userNotFoundFemaleImage from '../imagenes/user-not-found-female.png';
 
 export function ActoresMnt() {
     const [modo, setModo] = useState('list');
@@ -26,8 +28,8 @@ export function ActoresMnt() {
                 response.json().then(response.ok ? data => {
                     setModo('list')
                     setListado(data.content)
-                    setPaginacion({pagina: data.number, paginas: data.totalPages})
-                    setLoading(false) 
+                    setPaginacion({ pagina: data.number, paginas: data.totalPages })
+                    setLoading(false)
                 } : error => setError(`${error.status}: ${error.error}`))
             })
             .catch(error => setError(error.message))
@@ -46,7 +48,7 @@ export function ActoresMnt() {
                 response.json().then(response.ok ? data => {
                     setModo('edit')
                     setElemento(data)
-                    setLoading(false) 
+                    setLoading(false)
                     idOriginal = key
                 } : error => setError(`${error.status}: ${error.error}`))
             })
@@ -59,7 +61,7 @@ export function ActoresMnt() {
                 response.json().then(response.ok ? data => {
                     setModo('view')
                     setElemento(data)
-                    setLoading(false) 
+                    setLoading(false)
                 } : error => setError(`${error.status}: ${error.error}`))
             })
             .catch(error => setError(error))
@@ -120,10 +122,10 @@ export function ActoresMnt() {
                 break;
         }
     }
-    useEffect(() => list(0), [idOriginal])
+    useEffect(() => list(0), [])
 
     if (loading) return <Esperando />;
-    let result = [ <ErrorMessage key="error" msg={errorMsg} onClear={() => setErrorMsg(null)} />]
+    let result = [<ErrorMessage key="error" msg={errorMsg} onClear={() => setErrorMsg(null)} />]
     switch (modo) {
         case "add":
         case "edit":
@@ -286,7 +288,7 @@ export class xActoresMnt extends Component {
     }
     render() {
         if (this.state.loading) return <Esperando />;
-        let result = [ <ErrorMessage key="error" msg={this.state.error} onClear={() => this.setState({error: null})} />]
+        let result = [<ErrorMessage key="error" msg={this.state.error} onClear={() => this.setState({ error: null })} />]
         switch (this.state.modo) {
             case "add":
             case "edit":
@@ -334,12 +336,12 @@ function ActoresList(props) {
                     <tr>
                         <th>Lista de Actores y Actrices</th>
                         <th className="text-end">
-                            <input
+                            <button
                                 type="button"
                                 className="btn btn-primary"
                                 value="Añadir"
                                 onClick={e => props.onAdd()}
-                            />
+                            ><i className="far fa-plus"></i></button>
                         </th>
                     </tr>
                 </thead>
@@ -347,28 +349,34 @@ function ActoresList(props) {
                     {props.listado.map(item => (
                         <tr key={item.actorId}>
                             <td>
-                                {titleCase(item.nombre)}
+                            <img className="rounded-circle float-left" src={`https://randomuser.me/api/portraits/${(Math.random() * 100) % 2 < 1 ? 'men' : 'women'}/${item.actorId}.jpg`}
+                                                alt={`Foto de ${item.nombre} ${item.apellidos || ''}`} width="75" height="75"
+                                                onError={({ currentTarget }) => {
+                                                    currentTarget.onerror = null; // prevents looping
+                                                    currentTarget.src = (Math.random() * 100) % 2 < 1 ? userNotFoundMaleImage : userNotFoundFemaleImage;
+                                                }} />
+                                <span class="display-5"> {titleCase(item.nombre)}</span>
                             </td>
                             <td className="text-end">
                                 <div className="btn-group text-end" role="group">
-                                    <input
+                                    <button
                                         type="button"
                                         className="btn btn-primary"
-                                        value="Ver"
+                                        alt='Ver'
                                         onClick={e => props.onView(item.actorId)}
-                                    />
-                                    <input
+                                    ><i className="fas fa-eye"></i></button>
+                                    <button
                                         type="button"
                                         className="btn btn-primary"
-                                        value="Editar"
+                                        alt="Editar"
                                         onClick={e => props.onEdit(item.actorId)}
-                                    />
-                                    <input
+                                    ><i className="fas fa-pen"></i></button>
+                                    <button
                                         type="button"
                                         className="btn btn-danger"
-                                        value="Borrar"
+                                        alt="Borrar"
                                         onClick={e => props.onDelete(item.actorId)}
-                                    />
+                                    ><i className="far fa-trash-alt"></i></button>
                                 </div>
                             </td>
                         </tr>
@@ -403,7 +411,7 @@ function ActoresView({ elemento, onCancel }) {
     )
 }
 
-class ActoresForm extends Component {
+class xActoresForm extends Component {
     constructor(props) {
         super(props);
         this.state = { elemento: props.elemento, msgErr: [], invalid: false };
@@ -522,4 +530,80 @@ class ActoresForm extends Component {
             </form>
         );
     }
+}
+function ActoresForm(props) {
+    const [elemento, setElemento] = useState(props.elemento)
+    const [msgErr, setMsgErr] = useState([])
+    const [invalid, setInvalid] = useState(false)
+    const form = React.createRef();
+    const onSend = () => { props.onSend && props.onSend(elemento); }
+    const onCancel = () => {
+        if (props.onCancel) props.onCancel();
+    };
+
+    const handleChange = (event) => {
+        const cmp = event.target.name;
+        const valor = event.target.value;
+        elemento[cmp] = valor;
+        setElemento(elemento)
+        validar();
+    }
+    const validarCntr = (cntr) => {
+        if (cntr.name) {
+            // eslint-disable-next-line default-case
+            switch (cntr.name) {
+                case "apellidos":
+                    cntr.setCustomValidity(cntr.value !== cntr.value.toUpperCase()
+                        ? "Debe estar en mayúsculas" : '');
+                    break;
+            }
+        }
+    }
+    const validar = () => {
+        if (form.current) {
+            const errors = {};
+            let invalid = false;
+            for (var cntr of form.current.elements) {
+                if (cntr.name) {
+                    validarCntr(cntr);
+                    errors[cntr.name] = cntr.validationMessage;
+                    invalid = invalid || !cntr.validity.valid;
+                }
+            }
+            setMsgErr(errors)
+            setInvalid(invalid)
+        }
+    }
+    useEffect(() => validar(), [])
+
+    return (
+        <form ref={form} >
+            <div className="form-group">
+                <label htmlFor="id">Código</label>
+                <input type="number" className={'form-control' + (props.isAdd ? '' : '-plaintext')}
+                    id="id" name="id" value={elemento.id}
+                    onChange={handleChange} required readOnly={!props.isAdd}
+                />
+                <ValidationMessage msg={msgErr.id} />
+            </div>
+            <div className="form-group">
+                <label htmlFor="nombre">Nombre</label>
+                <input type="text" className="form-control"
+                    id="nombre" name="nombre" value={elemento.nombre}
+                    onChange={handleChange} required minLength="2" maxLength="45" />
+                <ValidationMessage msg={msgErr.nombre} />
+            </div>
+            <div className="form-group">
+                <label htmlFor="apellidos">Apellidos</label>
+                <input type="text" className="form-control"
+                    id="apellidos" name="apellidos" value={elemento.apellidos}
+                    onChange={handleChange} minLength="2" maxLength="45" />
+                <ValidationMessage msg={msgErr.apellidos} />
+            </div>
+            <div className="form-group">
+                <button className="btn btn-primary" type="button" disabled={invalid} onClick={onSend} >Enviar</button>
+                <button className="btn btn-primary" type="button" onClick={onCancel} >Volver</button>
+            </div>
+        </form>
+    );
 }
