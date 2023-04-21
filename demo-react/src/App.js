@@ -4,7 +4,7 @@ import './App.css';
 
 
 import React, { Component } from 'react'
-import { Card, Contador } from './componentes';
+import { Card, Contador, Coordenadas } from './componentes';
 import { ErrorBoundary } from './biblioteca/comunes';
 import Calculadora from './ejercicios/calculadora';
 import Muro from './ejercicios/muro';
@@ -153,6 +153,7 @@ class DemosJSX extends Component {
     ]
     return (
       <>
+        <Coordenadas />
         {saluda}
         {limpia ? <b>verdadero</b> : <i>falso {nombre}</i>}
         {limpia && <h2>Limpia</h2>}

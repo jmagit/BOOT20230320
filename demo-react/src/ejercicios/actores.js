@@ -2,171 +2,167 @@ import React, { Component, useState, useEffect } from "react";
 import { ValidationMessage, ErrorMessage, Esperando, PaginacionCmd as Paginacion } from "../biblioteca/comunes";
 import { titleCase } from '../biblioteca/formateadores';
 
-// export function ActoresMnt() {
-//     const [modo, setModo] = useState('list');
-//     const [listado, setListado] = useState(null);
-//     const [elemento, setElemento] = useState(null);
-//     const [loading, setLoading] = useState(true);
-//     const [paginacion, setPaginacion] = useState({ pagina: 0, paginas: 0 })
-//     const [errorMsg, setErrorMsg] = useState(null);
-//     let idOriginal = null;
-//     let url = (process.env.REACT_APP_API_URL || 'http://localhost:8010/') + 'actores/v1';
+export function ActoresMnt() {
+    const [modo, setModo] = useState('list');
+    const [listado, setListado] = useState(null);
+    const [elemento, setElemento] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [paginacion, setPaginacion] = useState({ pagina: 0, paginas: 0 })
+    const [errorMsg, setErrorMsg] = useState(null);
+    let idOriginal = null;
+    let url = (process.env.REACT_APP_API_URL || 'http://localhost:8010/') + 'actores/v1';
 
-//     const setError = (msg) => {
-//         setErrorMsg(msg)
-//         setLoading(false)
-//     }
+    const setError = (msg) => {
+        setErrorMsg(msg)
+        setLoading(false)
+    }
 
-//     const list = (num) => {
-//         let pagina = paginacion.pagina
-//         if (num || num === 0) pagina = num
-//         setLoading(true)
-//         fetch(`${url}?sort=firstName&page=${pagina}&size=10`)
-//             .then(response => {
-//                 response.json().then(response.ok ? data => {
-//                     setModo('list')
-//                     setListado(data.content)
-//                     setPaginacion({pagina: data.number, totalPages: data.totalPages})
-//                     setLoading(false) 
-//                 } : error => setError(`${error.status}: ${error.error}`))
-//             })
-//             .catch(error => setError(error))
-//     }
+    const list = (num) => {
+        let pagina = paginacion.pagina
+        if (num || num === 0) pagina = num
+        setLoading(true)
+        fetch(`${url}?sort=firstName&page=${pagina}&size=10`)
+            .then(response => {
+                response.json().then(response.ok ? data => {
+                    setModo('list')
+                    setListado(data.content)
+                    setPaginacion({pagina: data.number, paginas: data.totalPages})
+                    setLoading(false) 
+                } : error => setError(`${error.status}: ${error.error}`))
+            })
+            .catch(error => setError(error.message))
+    }
 
-//     const add = () => {
-//         this.setState({
-//             modo: "add",
-//             elemento: { id: 0, nombre: "", apellidos: "" }
-//         });
-//     }
-//     const edit = (key) => {
-//         setLoading(true)
-//         fetch(`${url}/${key}`)
-//             .then(response => {
-//                 response.json().then(response.ok ? data => {
-//                     setModo('edit')
-//                     setElemento(data)
-//                     setLoading(false) 
-//                     idOriginal = key
-//                 } : error => setError(`${error.status}: ${error.error}`))
-//             })
-//             .catch(error => setError(error))
-//     }
-//     const view = (key) => {
-//         setLoading(true)
-//         fetch(`${url}/${key}`)
-//             .then(response => {
-//                 response.json().then(response.ok ? data => {
-//                     setModo('view')
-//                     setElemento(data)
-//                     setLoading(false) 
-//                 } : error => setError(`${error.status}: ${error.error}`))
-//             })
-//             .catch(error => setError(error))
-//     }
-//     const remove = (key) => {
-//         if (!window.confirm("¿Seguro?")) return;
-//         setLoading(true)
-//         fetch(`${url}/${key}`, { method: 'DELETE' })
-//             .then(response => {
-//                 if (response.ok)
-//                     list()
-//                 else
-//                     response.json().then(error => setError(`${error.status}: ${error.error}`))
-//                 setLoading(false)
-//             })
-//             .catch(error => setError(error))
-//     }
-//     const cancel = () => {
-//         list();
-//     }
-//     const send = (elemento) => {
-//         setLoading(true)
-//         // eslint-disable-next-line default-case
-//         switch (modo) {
-//             case "add":
-//                 fetch(`${url}`, {
-//                     method: 'POST',
-//                     body: JSON.stringify(elemento),
-//                     headers: {
-//                         'Content-Type': 'application/json'
-//                     }
-//                 })
-//                     .then(response => {
-//                         if (response.ok)
-//                             cancel()
-//                         else
-//                             response.json().then(error => setError(`${error.status}: ${error.detail}`))
-//                         setLoading(false)
-//                     })
-//                     .catch(error => setError(error))
-//                 break;
-//             case "edit":
-//                 fetch(`${url}/${idOriginal}`, {
-//                     method: 'PUT',
-//                     body: JSON.stringify(elemento),
-//                     headers: {
-//                         'Content-Type': 'application/json'
-//                     }
-//                 })
-//                     .then(response => {
-//                         if (response.ok)
-//                             cancel()
-//                         else
-//                             response.json().then(error => setError(`${error.status}: ${error.detail}`))
-//                         setLoading(false)
-//                     })
-//                     .catch(error => setError(error))
-//                 break;
-//         }
-//     }
-//     useEffect(() => {
-//         list(0)
-//         console.log('useEffect')
-//         return () => console.log('un useEffect')
-//     }, [idOriginal])
+    const add = () => {
+        this.setState({
+            modo: "add",
+            elemento: { id: 0, nombre: "", apellidos: "" }
+        });
+    }
+    const edit = (key) => {
+        setLoading(true)
+        fetch(`${url}/${key}`)
+            .then(response => {
+                response.json().then(response.ok ? data => {
+                    setModo('edit')
+                    setElemento(data)
+                    setLoading(false) 
+                    idOriginal = key
+                } : error => setError(`${error.status}: ${error.error}`))
+            })
+            .catch(error => setError(error))
+    }
+    const view = (key) => {
+        setLoading(true)
+        fetch(`${url}/${key}`)
+            .then(response => {
+                response.json().then(response.ok ? data => {
+                    setModo('view')
+                    setElemento(data)
+                    setLoading(false) 
+                } : error => setError(`${error.status}: ${error.error}`))
+            })
+            .catch(error => setError(error))
+    }
+    const remove = (key) => {
+        if (!window.confirm("¿Seguro?")) return;
+        setLoading(true)
+        fetch(`${url}/${key}`, { method: 'DELETE' })
+            .then(response => {
+                if (response.ok)
+                    list()
+                else
+                    response.json().then(error => setError(`${error.status}: ${error.error}`))
+                setLoading(false)
+            })
+            .catch(error => setError(error))
+    }
+    const cancel = () => {
+        list();
+    }
+    const send = (elemento) => {
+        setLoading(true)
+        // eslint-disable-next-line default-case
+        switch (modo) {
+            case "add":
+                fetch(`${url}`, {
+                    method: 'POST',
+                    body: JSON.stringify(elemento),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(response => {
+                        if (response.ok)
+                            cancel()
+                        else
+                            response.json().then(error => setError(`${error.status}: ${error.detail}`))
+                        setLoading(false)
+                    })
+                    .catch(error => setError(error))
+                break;
+            case "edit":
+                fetch(`${url}/${idOriginal}`, {
+                    method: 'PUT',
+                    body: JSON.stringify(elemento),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(response => {
+                        if (response.ok)
+                            cancel()
+                        else
+                            response.json().then(error => setError(`${error.status}: ${error.detail}`))
+                        setLoading(false)
+                    })
+                    .catch(error => setError(error))
+                break;
+        }
+    }
+    useEffect(() => list(0), [idOriginal])
 
-//     if (loading) return <Esperando />;
-//     let result = [ <ErrorMessage key="error" msg={errorMsg} onClear={() => setErrorMsg(null)} />]
-//     switch (modo) {
-//         case "add":
-//         case "edit":
-//             result.push(
-//                 <ActoresForm key="main"
-//                     isAdd={modo === "add"}
-//                     elemento={elemento}
-//                     onCancel={e => cancel()}
-//                     onSend={e => send(e)}
-//                 />
-//             )
-//             break
-//         case "view":
-//             result.push(
-//                 <ActoresView key="main"
-//                     elemento={elemento}
-//                     onCancel={e => cancel()}
-//                 />
-//             )
-//             break
-//         default:
-//             if (listado) result.push(
-//                 <ActoresList key="main"
-//                     listado={listado}
-//                     {...paginacion}
-//                     onAdd={() => add()}
-//                     onView={key => view(key)}
-//                     onEdit={key => edit(key)}
-//                     onDelete={key => remove(key)}
-//                     onChangePage={num => list(num)}
-//                 />
-//             );
-//             break;
-//     }
-//     return result
-// }
+    if (loading) return <Esperando />;
+    let result = [ <ErrorMessage key="error" msg={errorMsg} onClear={() => setErrorMsg(null)} />]
+    switch (modo) {
+        case "add":
+        case "edit":
+            result.push(
+                <ActoresForm key="main"
+                    isAdd={modo === "add"}
+                    elemento={elemento}
+                    onCancel={e => cancel()}
+                    onSend={e => send(e)}
+                />
+            )
+            break
+        case "view":
+            result.push(
+                <ActoresView key="main"
+                    elemento={elemento}
+                    onCancel={e => cancel()}
+                />
+            )
+            break
+        default:
+            if (listado) result.push(
+                <ActoresList key="main"
+                    listado={listado}
+                    {...paginacion}
+                    onAdd={() => add()}
+                    onView={key => view(key)}
+                    onEdit={key => edit(key)}
+                    onDelete={key => remove(key)}
+                    onChangePage={num => list(num)}
+                />
+            );
+            break;
+    }
+    return result
+}
 
 
-export class ActoresMnt extends Component {
+export class xActoresMnt extends Component {
     constructor(props) {
         super(props);
         this.state = { modo: "list", listado: null, elemento: null, error: null, loading: true, pagina: 0, paginas: 0 };

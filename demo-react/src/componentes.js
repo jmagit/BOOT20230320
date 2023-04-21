@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, useState, useEffect } from 'react'
 
 function Pantalla(props) {
     return <output>{props.valor}</output>
@@ -64,3 +64,22 @@ export class Card extends Component {
         )
     }
 }
+
+export function Coordenadas(props) {
+    const [coordenadas, setCoordenadas] = useState({ latitud: null, longitud: null});
+    let watchId = null;
+    useEffect(() => {
+      watchId = window.navigator.geolocation.watchPosition(pos => {
+        setCoordenadas({latitud: pos.coords.latitude, longitud: pos.coords.longitude })
+      });
+      return () => window.navigator.geolocation.clearWatch(watchId);
+    }, [coordenadas]);
+    return coordenadas.latitud == null ? (<div>Cargando</div>) : (
+        <div>
+          <h1>Coordenadas</h1>
+          <h2>Latitud: {coordenadas.latitud}</h2>
+          <h2>Longitud: {coordenadas.longitud}</h2>
+        </div>
+      );
+  }
+  
