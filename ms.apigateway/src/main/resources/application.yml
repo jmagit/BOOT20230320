@@ -65,7 +65,7 @@ spring:
       - id: front-end
         predicates:
           - Path=/**
-        uri: ${FRONTEND_URL:http://localhost:4200}
+        uri: ${FRONTEND_URL:http://localhost:3000}
 logging:
   level:
     org.springframework.cloud.gateway: DEBUG

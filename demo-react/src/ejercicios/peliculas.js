@@ -178,7 +178,7 @@ export function PeliculasMnt() {
 function PeliculasList(props) {
     return (
         <>
-            <h1>Películas <button
+            <h1 className='display-1'>Películas <button
                 type="button"
                 className="btn btn-primary"
                 title="Añadir"
