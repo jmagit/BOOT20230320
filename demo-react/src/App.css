@@ -36,6 +36,6 @@
     transform: rotate(360deg);
   }
 }
-.error {
+.error, .errorMsg {
   color: red;
 }

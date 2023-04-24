@@ -11,7 +11,7 @@ export function ActoresMnt() {
     const [loading, setLoading] = useState(true);
     const [paginacion, setPaginacion] = useState({ pagina: 0, paginas: 0 })
     const [errorMsg, setErrorMsg] = useState(null);
-    let idOriginal = null;
+    const [idOriginal, setIdOriginal] = useState(null);
     let url = (process.env.REACT_APP_API_URL || 'http://localhost:8010/') + 'actores/v1';
 
     const setError = (msg) => {
@@ -36,10 +36,8 @@ export function ActoresMnt() {
     }
 
     const add = () => {
-        this.setState({
-            modo: "add",
-            elemento: { id: 0, nombre: "", apellidos: "" }
-        });
+        setModo('add')
+        setElemento({ id: 0, nombre: "", apellidos: ""  });
     }
     const edit = (key) => {
         setLoading(true)
@@ -49,7 +47,7 @@ export function ActoresMnt() {
                     setModo('edit')
                     setElemento(data)
                     setLoading(false)
-                    idOriginal = key
+                    setIdOriginal(key)
                 } : error => setError(`${error.status}: ${error.error}`))
             })
             .catch(error => setError(error))
@@ -339,7 +337,7 @@ function ActoresList(props) {
                             <button
                                 type="button"
                                 className="btn btn-primary"
-                                value="Añadir"
+                                title="Añadir"
                                 onClick={e => props.onAdd()}
                             ><i className="far fa-plus"></i></button>
                         </th>
@@ -362,19 +360,19 @@ function ActoresList(props) {
                                     <button
                                         type="button"
                                         className="btn btn-primary"
-                                        alt='Ver'
+                                        title='Ver'
                                         onClick={e => props.onView(item.actorId)}
                                     ><i className="fas fa-eye"></i></button>
                                     <button
                                         type="button"
                                         className="btn btn-primary"
-                                        alt="Editar"
+                                        title="Editar"
                                         onClick={e => props.onEdit(item.actorId)}
                                     ><i className="fas fa-pen"></i></button>
                                     <button
                                         type="button"
                                         className="btn btn-danger"
-                                        alt="Borrar"
+                                        title="Borrar"
                                         onClick={e => props.onDelete(item.actorId)}
                                     ><i className="far fa-trash-alt"></i></button>
                                 </div>

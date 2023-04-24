@@ -90,7 +90,10 @@ export function Calculadora(fnPantalla, fnResumen) {
 		pintaPantalla();
 	};
 	ref.calcula = function (value) {
-		if ('+-*/='.indexOf(value) == -1) return;
+		if ('+-*/='.indexOf(value) == -1) {
+			console.error(`Operación no soportada: ${value}`);
+			return;
+		}
 
 		let operando = parseFloat(miPantalla);
 		switch (operador) {
