@@ -96,6 +96,7 @@ export function Calculadora(fnPantalla, fnResumen) {
 		}
 
 		let operando = parseFloat(miPantalla);
+		// eslint-disable-next-line default-case
 		switch (operador) {
 			case '+':
 				acumulado += operando;

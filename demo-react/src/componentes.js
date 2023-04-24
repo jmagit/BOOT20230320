@@ -1,7 +1,7 @@
 import React, { Component, useState, useEffect } from 'react'
 
 function Pantalla(props) {
-    return <output>{props.valor}</output>
+    return <output data-testid="pantalla">{props.valor}</output>
 }
 
 function Botonera({onSube, onBaja}) {

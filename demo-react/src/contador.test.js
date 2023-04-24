@@ -17,7 +17,7 @@ describe('Contador como componente', () => {
         container = null;
     });
 
-    test.skip('Creación', () => {
+    test('Creación', () => {
         let comp = render(<Contador init={10} />, { container })
         // data-testid="pantalla"
         expect(comp.getByTestId('pantalla').textContent).toBe("10");
